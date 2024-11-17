@@ -210,12 +210,11 @@
             {% for sighting in sightings|reverse %}
             <li onclick="toggleDetails(this)">
                 <p class="anger-level">
-                    <span>{{ sighting.datetime.strftime('%B %d, %Y %I:%M %p') }}</span>
-                    <span>User Comments: {{ sighting.comment }}</span>
-                    <span>Anger Level: {{ sighting.anger_level }}</span>
+                    <span>{{ sighting.datetime.strftime('%B %d, %Y %I:%M %p') }}. User Comments: {{ sighting.comment }}</span>
                     <span class="toggle-icon">&#9660;</span> <!-- Downward arrow -->
                 </p>
                     <div class="sighting-details">
+                        <p><strong>Anger Level:</strong> {{ sighting.anger_level }}</p>
                         <p><strong>Location:</strong> {{ sighting.location }}</p>
                         <p><strong>Blower User:</strong> {{ sighting.blower_user }}</p>
                         <p><strong>Blower Type:</strong> {{ sighting.blower_type }}</p>
