@@ -1,0 +1,5 @@
+used this to change the sightings table to debug the if elif elif else in the home page that says how long its been since the last sighting.
+
+UPDATE sightings
+SET datetime = datetime(datetime, '-1 day')
+WHERE datetime = (SELECT MAX(datetime) FROM sightings);

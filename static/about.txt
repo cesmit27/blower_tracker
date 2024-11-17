@@ -1,0 +1,9 @@
+<p>Leaf blowers can be really annoying. Whether they are so noisy that you can't focus at work or parking on the side of your house's street making it hard to get past, I'm sure we all have a gripe with them.</p>
+<br>
+<p>Personally, I have had a problem with them since I was at college. The building I lived in at school was shaped like a "U", and I was on the inside of that "U". 
+The blowers would show up bright and early and the noise would echo off the walls of the building, and of course that is just a completly impossible situation to sleep in. 
+Eventually, I kept getting fed up with this so I started messaging one of my friends to let him know about this situation, and it turned into a bit of an inside joke where whenever one of us saw a leaf blower, we would text that gif you can see on this page to each other.</p>
+<br>
+<p>I made this site as a silly way to track whenever you see a leaf blower, and keep tabs on when other users see a leaf blower. It provided a way for me to learn some HTML and I'm planning to use the data collected from the logs in a machine learning project (probably just linear regression lol) but it should help me get more familiar with Python too.</p>
+<br>
+<p>Thanks for checking out this website! Just wanted to disclose that I had help from ChatGPT with some of the CSS stuff and with help learning how to use Flask, since I haven't done any web design in the past.</p>
