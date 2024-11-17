@@ -62,7 +62,8 @@ def home():
     top_users = [{'user': User.query.get(user_id), 'total_sightings': total_sightings} for user_id, total_sightings in top_sightings]
 
     try:
-        with open(('static/about.txt'), 'r') as file:
+        about_file_path = os.path.join(app.root_path, 'static', 'about.txt')  # Absolute path to static/about.txt
+        with open(about_file_path, 'r') as file:
             about = file.read()
     except FileNotFoundError:
         about = "About content not available."
