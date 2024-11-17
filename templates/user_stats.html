@@ -203,6 +203,7 @@
         <!-- Hide GIF until page is fully loaded -->
         <img id="loading-gif" src="{{ url_for('static', filename='chair.webp') }}" alt="Angry Emoji">
         <h3>Total Sightings: {{ user.sightings | length }}</h3>
+        <h6>Time is displayed in UTC since I couldnt get it to work for local users time. (UTC is 4 hours ahead of EDT (Eastern Daylight Time) during daylight saving time, and 5 hours ahead of EST (Eastern Standard Time) when daylight saving time is not observed.)</h6>
         <ul class="sighting-list">
             {% for sighting in sightings|reverse %}
             <li onclick="toggleDetails(this)">
