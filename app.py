@@ -27,7 +27,9 @@ def home():
     user = User.query.get(user_id)  # Get the user from the database using the ID
 
     last_sighting = Sighting.query.filter_by(user_id=user_id).order_by(Sighting.datetime.desc()).first()
-
+    home_gif = "mad-angry.gif"
+    days_since = "No sightings yet"
+    
     if last_sighting:
         # Get the current time in the user's local timezone (simplified to system local time)
         now = datetime.fromtimestamp(time.time())  # Current time (system local time)
@@ -35,8 +37,6 @@ def home():
 
         # Calculate the time difference from the most recent sighting
         diff = now - sighting_time_local  # The difference between now and the sighting time
-        
-        home_gif = "mad-angry.gif"
         # Calculate days, hours, and minutes
         if diff.days == 0 and diff.seconds < 3600:  # Less than 1 hour (in seconds)
             minutes = diff.seconds // 60
