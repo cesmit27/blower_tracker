@@ -13,7 +13,9 @@ app.secret_key = 'your_secret_key_here'
 app.config.from_object(Config)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
+# Initialize Flask-Migrate and SQLAlchemy with the app
 db.init_app(app)
+migrate = Migrate(app, db)  # Initialize Flask-Migrate with app and db
 
 @app.route('/')
 def home():
