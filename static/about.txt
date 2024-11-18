@@ -6,4 +6,4 @@ Eventually, I kept getting fed up with this so I started messaging one of my fri
 <br>
 <p>I made this site as a silly way to track whenever you see a leaf blower, and keep tabs on when other users see a leaf blower. It provided a way for me to learn some HTML and I'm planning to use the data collected from the logs in a machine learning project (probably just linear regression lol) but it should help me get more familiar with Python too.</p>
 <br>
-<p>Thanks for checking out this website! Just wanted to disclose that I had help from ChatGPT with some of the CSS stuff and with help learning how to use Flask, since I haven't done any web design in the past.</p>
+<p>Thanks for checking out this website! </p>
