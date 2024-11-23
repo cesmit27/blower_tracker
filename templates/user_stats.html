@@ -1,4 +1,3 @@
-<!-- templates/user_stats.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,6 +32,7 @@
             margin-bottom: 30px;
             border-radius: 8px;
             text-align: left;
+            position: relative;
         }
 
         h1 {
@@ -108,7 +108,13 @@
             cursor: pointer;
             text-align: center;
             text-decoration: none;
+            background-color: #f44336;
+            color: white;
             transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #e53935;
         }
 
         .back-btn {
@@ -129,25 +135,6 @@
             background-color: #89ca8a;
             text-decoration: underline;
             color: #0000EE;  /* Change text color to blue */
-        }
-
-         /* Logout button outside the container */
-         .logout-btn {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            padding: 10px 15px;
-            background-color: #f44336;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            background-color: #e53935;
         }
 
         /* Links container for buttons */
@@ -172,9 +159,10 @@
             color: #4CAF50;  /* Green color for better emphasis */
             text-decoration: underline;
         }
+
         .anger-level span {
             display: block; /* Forces each span to start on a new line */
-             margin-bottom: 5px; /* Adds space between each line */
+            margin-bottom: 5px; /* Adds space between each line */
         }
 
         /* Center the image within the container */
@@ -185,27 +173,34 @@
             margin-bottom: 25px;
             max-width: 100%; /* ensures the image doesn't overflow */
             height: auto;
-        }   
+        }
+
+        /* Top-right logout button inside the container */
+        .logout-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
     </style>
 
 </head>
 <body>
 
-    <!-- Logout Button -->
-    <form action="{{ url_for('logout') }}" method="POST" style="display: inline;">
-        <button type="submit" class="logout-btn">Logout</button>
-    </form>
-
     <div class="container">
+        <!-- Logout Button -->
+        <div class="logout-container">
+            <form action="{{ url_for('logout') }}" method="POST" style="display: inline;">
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </div>
         <a href="{{ url_for('home') }}" class="back-btn">Home</a>
         <a href="{{ url_for('log_sighting') }}" class="back-btn">Log a New Sighting</a>
         <h1>{{ user.username }}'s Stats</h1>
         <!-- Hide GIF until page is fully loaded -->
         <img id="loading-gif" src="{{ url_for('static', filename='chair.webp') }}" alt="Angry Emoji">
         <h3>Total Sightings: {{ user.sightings | length }}</h3>
-        <h5>Time is displayed in UTC since I couldnt get it to work for local users time.</h5>
-        <h5>UTC is 4 hours ahead of EDT (Eastern Daylight Time) during daylight saving time, and 5 hours ahead of EST (Eastern Standard Time) when daylight saving time is not observed.</h5>
-        
+        <h6>Time is displayed in UTC since I couldnt get it to work for local users time.</h6>
+        <h6>UTC is 4 hours ahead of EDT (Eastern Daylight Time) during daylight saving time, and 5 hours ahead of EST (Eastern Standard Time) when daylight saving time is not observed.</h6>
         <ul class="sighting-list">
             {% for sighting in sightings|reverse %}
             <li onclick="toggleDetails(this)">
@@ -213,17 +208,17 @@
                     <span>{{ sighting.datetime.strftime('%B %d, %Y %I:%M %p') }}. User Comments: {{ sighting.comment }}</span>
                     <span class="toggle-icon">&#9660;</span> <!-- Downward arrow -->
                 </p>
-                    <div class="sighting-details">
-                        <p><strong>Anger Level:</strong> {{ sighting.anger_level }}</p>
-                        <p><strong>Location:</strong> {{ sighting.location }}</p>
-                        <p><strong>Blower User:</strong> {{ sighting.blower_user }}</p>
-                        <p><strong>Blower Type:</strong> {{ sighting.blower_type }}</p>
-                        <p><strong>Number of Blowers:</strong> {{ sighting.num_blowers }}</p>
-                        <p><strong>Weather:</strong> {{ sighting.weather }}</p>
-                        <p><strong>Noise Level:</strong> {{ sighting.noise_level }}</p>
-                        <p><strong>Duration:</strong> {{ sighting.duration }} minutes</p>
-                    </div>
-                </li>
+                <div class="sighting-details">
+                    <p><strong>Anger Level:</strong> {{ sighting.anger_level }}</p>
+                    <p><strong>Location:</strong> {{ sighting.location }}</p>
+                    <p><strong>Blower User:</strong> {{ sighting.blower_user }}</p>
+                    <p><strong>Blower Type:</strong> {{ sighting.blower_type }}</p>
+                    <p><strong>Number of Blowers:</strong> {{ sighting.num_blowers }}</p>
+                    <p><strong>Weather:</strong> {{ sighting.weather }}</p>
+                    <p><strong>Noise Level:</strong> {{ sighting.noise_level }}</p>
+                    <p><strong>Duration:</strong> {{ sighting.duration }} minutes</p>
+                </div>
+            </li>
             {% endfor %}
         </ul>
     </div>
