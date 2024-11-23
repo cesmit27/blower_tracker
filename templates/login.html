@@ -1,4 +1,3 @@
-<!-- templates/login.html -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,6 +5,10 @@
     <title>Login</title>
     <!-- Favicon link -->
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    
+    <!-- Viewport meta tag for proper mobile scaling -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <style>
         /* General styles */
         body {
@@ -98,6 +101,29 @@
 
         a:hover {
             text-decoration: underline;
+        }
+
+        /* Mobile view adjustments */
+        @media (max-width: 600px) {
+            .login-container {
+                width: 90%; /* Allow more space on mobile */
+                padding: 2rem;  /* Add more padding around the container */
+                font-size: 0.9rem; /* Slightly smaller text on small screens */
+                margin: 10px;  /* Add margin around the container */
+            }
+
+            h1 {
+                font-size: 1.5rem; /* Slightly smaller title on mobile */
+                margin-bottom: 1rem;
+            }
+
+            input, button {
+                font-size: 0.9rem; /* Adjust font size of inputs and button */
+            }
+
+            p {
+                font-size: 0.8rem; /* Adjust font size for the footer link */
+            }
         }
     </style>
 </head>
