@@ -8,7 +8,7 @@
 
     <!-- Favicon link -->
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-    
+
     <style>
         /* General reset and layout */
         body {
@@ -25,7 +25,7 @@
         /* Main container for content */
         .container {
             max-width: 900px;
-            width: 100%;
+            width: 90%; /* Allow some buffer space on smaller screens */
             background-color: white;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
@@ -36,7 +36,7 @@
         }
 
         h1 {
-            font-size: 32px;
+            font-size: 28px; /* Slightly smaller for better scaling on phones */
             color: #333;
             margin-bottom: 20px;
         }
@@ -55,7 +55,7 @@
         }
 
         select, input, textarea {
-            width: 97.5%;
+            width: 100%; /* Use full width to adapt to smaller screens */
             padding: 10px;
             margin-bottom: 15px;
             font-size: 16px;
@@ -85,16 +85,16 @@
         }
 
         .logout-btn {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            padding: 10px 15px;
-            background-color: #f44336;
+            display: block; /* Ensure it behaves like a block element */
+            margin: 0 0 20px auto; /* Right-align with margin on the right side */
+            padding: 10px 15px; /* Add some padding */
+            background-color: #f44336; /* Same styling */
             color: white;
             border: none;
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
         .logout-btn:hover {
@@ -133,7 +133,7 @@
         }
 
         .flash-message img {
-            max-width: 130;
+            max-width: 130px;
             max-height: 130px;
             margin-right: 10px;
         }
@@ -145,37 +145,70 @@
             text-align: left;
         }
 
+        /* Image Responsiveness */
+        #loading-gif {
+            display: block;
+            margin: 20px auto;
+            max-width: 100%; /* Ensure it never overflows */
+            height: auto;
+        }
+
+        /* Responsive Design for Phones */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            .container {
+                padding: 15px; /* Slightly smaller padding for narrow screens */
+            }
+
+            button {
+                font-size: 14px;
+                padding: 10px 20px;
+            }
+
+            .logout-btn {
+                top: -15px; /* Adjust positioning for smaller screens */
+                font-size: 14px;
+                padding: 8px 12px;
+            }
+
+            .links-container a {
+                font-size: 12px;
+            }
+
+            .flash-message {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
-
+    <div class="container">
     <!-- Logout Button -->
     <form action="{{ url_for('logout') }}" method="POST" style="display: inline;">
         <button type="submit" class="logout-btn">Logout</button>
     </form>
 
-    <div class="container">
-        <h1>Log a New Sighting</h1>
-
-        <!-- Hide GIF until page is fully loaded -->
-        <img id="loading-gif" src="{{ url_for('static', filename='what.webp') }}">
+    <h1>Log a New Sighting</h1>
+    <!-- Hide GIF until page is fully loaded -->
+    <img id="loading-gif" src="{{ url_for('static', filename='what.webp') }}">
 
         <form method="POST" onsubmit="return validateComment()">
-            <!-- Blower User Dropdown -->
+            <!-- Dropdowns and Input Fields -->
             <label for="blower_user">Blower User:</label>
             <select name="blower_user" id="blower_user" required>
                 <option value="Landscaper">Landscaper</option>
                 <option value="Neighbor">Neighbor</option>
             </select>
 
-            <!-- Blower Type Dropdown -->
             <label for="blower_type">Blower Type:</label>
             <select name="blower_type" id="blower_type" required>
                 <option value="Electric">Electric</option>
                 <option value="Gas">Gas</option>
             </select>
 
-            <!-- Number of Blowers Dropdown -->
             <label for="num_blowers">Number of Blowers:</label>
             <select name="num_blowers" id="num_blowers" required>
                 <option value="1">1</option>
@@ -190,7 +223,6 @@
                 <option value="10">10</option>
             </select>
 
-            <!-- Location Dropdown -->
             <label for="location">Location:</label>
             <select name="location" id="location" required>
                 <option value="Residential">Residential</option>
@@ -199,7 +231,6 @@
                 <option value="Industrial">Industrial</option>
             </select>
 
-            <!-- Weather Dropdown -->
             <label for="weather">Weather:</label>
             <select name="weather" id="weather" required>
                 <option value="Sunny">Sunny</option>
@@ -209,7 +240,6 @@
                 <option value="Other">Other</option>
             </select>
 
-            <!-- Noise Level Dropdown -->
             <label for="noise_level">Noise Level (1-10):</label>
             <select name="noise_level" id="noise_level" required>
                 <option value="1">1</option>
@@ -224,7 +254,6 @@
                 <option value="10">10</option>
             </select>
 
-            <!-- Anger Level Dropdown -->
             <label for="anger_level">Anger Level (1-10):</label>
             <select name="anger_level" id="anger_level" required>
                 <option value="1">1</option>
@@ -241,49 +270,42 @@
 
             <!-- Duration Input -->
             <label for="duration">Duration (put 0 if unsure):</label>
-            <input type="number" name="duration" id="duration" min="0" max="120" required>
-            
-            <br>
+            <input
+                type="number"
+                name="duration"
+                id="duration"
+                min="0"
+                max="120"
+                required
+                style="box-sizing: border-box; padding: 10px; max-width: 100%;">
+
+            <!-- Flash Message -->
             <div class="flash-message" id="flash-message">
-                <img src="{{ url_for('static', filename='scott.png') }}">
-                <img src="{{ url_for('static', filename='scott.png') }}">
-                <img src="{{ url_for('static', filename='scott.png') }}">
-                <br>
-                <br>
-                <div class="message-content">
-                    <strong>No swears please!</strong>
-                </div>
+                <img src="{{ url_for('static', filename='caution.webp') }}" alt="Warning">
+                <span class="message-content" id="flash-text"></span>
             </div>
-            
-            <!-- User Comments -->
-            <label for="comment">Comments (Optional):</label>
-            <textarea name="comment" id="comment" maxlength="200" rows="4" placeholder="Leave your comment here..." required></textarea>
-            
-            <!-- Hidden input field to store the user's timezone -->
-            <input type="hidden" id="timezone" name="timezone">
 
-            <!-- Submit -->
-            <button>Log Sighting</button>
+            <!-- Comments Input -->
+            <label for="comments">Comments (optional):</label>
+            <textarea
+                name="comments"
+                id="comments"
+                rows="5"
+                maxlength="200"
+                style="box-sizing: border-box; padding: 10px; max-width: 100%;"></textarea>
+
+            <button type="submit">Submit</button>
         </form>
-
-        <!-- Back to Home link -->
-        <div class="links-container">
-            <a href="{{ url_for('home') }}">Back to Home</a>
-        </div>
     </div>
 
     <script>
-        // Check for offensive words
         function validateComment() {
-            const comment = document.getElementById('comment').value;
-            const invalidPattern = /\b(fuck|f\*ck|f\*cking|bitch|b\*tch|shit|sh\*t|asshole|\*ssh\*l\*|cock|c\*ck|dick|d\*ck|dickhead|f\*ckw\*t|motherf\*cker|n\*gg\*r|p\*ssy|w\*nker|whore|sl\*g|wanker|w\*nk\*r|c\*nts?|b\*st\*rd|pr\*ck|tw\*t|c\*cks\*cker|di\*k|cl\*t|f\*g|p\*ck|b\*t\*ch|b\.i\.t\.c\.h|d\-i\-c\-k)\b/gi;
-
-            if (invalidPattern.test(comment)) {
-                // Show the flash message with the warning and image
-                document.getElementById('flash-message').style.display = 'block';
-                return false; // Prevent form submission
+            const comment = document.getElementById("comments").value.trim();
+            if (comment.length > 200) {
+                alert("Comments should be under 200 characters.");
+                return false;
             }
-            return true; // Allow form submission
+            return true;
         }
     </script>
 
