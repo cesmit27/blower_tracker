@@ -3,12 +3,13 @@
 <html lang="en">
 
 <head>
+    <meta name="google-site-verification" content="1Qj4luGLJhkkuyI-_II0MECgW3NvoK6hAd3GieXY0-c" />
     <meta charset="UTF-8">
     <title>Leaf Blower Tracker</title>
-    
+
     <!-- Favicon link -->
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-    
+
     <!-- Preload the GIF to avoid issue where it was flashing -->
     <link rel="preload" href="{{ url_for('static', filename='mad-angry.gif') }}" as="image">
 
@@ -148,11 +149,12 @@
         /* Hide the GIF initially */
         #loading-gif {
             display: none;
-            max-width: 100%;  /* Ensure the gif is not too large */
+            max-width: auto;  /* Increased size (adjust value as needed) */
+            height: auto;      /* Maintains aspect ratio */
             margin-top: 20px;
-            display: block;  /* Ensure block-level display for centering */
-            margin-left: auto;  /* Center the GIF horizontally */
-            margin-right: auto;  /* Center the GIF horizontally */
+            display: block;    /* Ensure block-level display for centering */
+            margin-left: auto; /* Center the GIF horizontally */
+            margin-right: auto; /* Center the GIF horizontally */
         }
 
         /* About the site container */
@@ -226,7 +228,7 @@
                 It has been {{ days_since }} since your last blower sighting.
             {% endif %}
         </p>
-        
+
 
         <!-- Links for navigation -->
         <div class="links-container">
