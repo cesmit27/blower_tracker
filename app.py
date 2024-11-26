@@ -31,12 +31,11 @@ def home():
     days_since = "No sightings yet"
     
     if last_sighting:
-        # Get the current time in the user's local timezone (simplified to system local time)
-        now = datetime.fromtimestamp(time.time())  # Current time (system local time)
-        sighting_time_local = last_sighting.datetime  # Assuming datetime is stored in local time
+        now = datetime.fromtimestamp(time.time())
+        sighting_time_local = last_sighting.datetime
 
         # Calculate the time difference from the most recent sighting
-        diff = now - sighting_time_local  # The difference between now and the sighting time
+        diff = now - sighting_time_local
         # Calculate days, hours, and minutes
         if diff.days == 0 and diff.seconds < 3600:  # Less than 1 hour (in seconds)
             minutes = diff.seconds // 60
@@ -62,7 +61,7 @@ def home():
     top_users = [{'user': User.query.get(user_id), 'total_sightings': total_sightings} for user_id, total_sightings in top_sightings]
 
     try:
-        about_file_path = os.path.join(app.root_path, 'static', 'about.txt')  # Absolute path to static/about.txt
+        about_file_path = os.path.join(app.root_path, 'static', 'about.txt')
         with open(about_file_path, 'r') as file:
             about = file.read()
     except FileNotFoundError:
@@ -151,10 +150,8 @@ def log_sighting():
     user = User.query.get(session['user_id'])  # Get the logged-in user
     
     if request.method == 'POST':
-        # Get the current time in system local time (simplified for local use)
-        now = datetime.fromtimestamp(time.time())  # Define now in system local time
+        now = datetime.fromtimestamp(time.time())
 
-        # Create the sighting object with the local time
         sighting = Sighting(
             user_id=session['user_id'],  # Use the logged-in user's ID
             blower_user=request.form.get('blower_user'),
