@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 import time
 
 app = Flask(__name__)
-app.secret_key = 'its a secret lol'
+app.secret_key = 'your_secret_key_here'
 app.config.from_object(Config)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
@@ -29,13 +29,14 @@ def home():
     last_sighting = Sighting.query.filter_by(user_id=user_id).order_by(Sighting.datetime.desc()).first()
     home_gif = "mad-angry.gif"
     days_since = "No sightings yet"
-    
+
     if last_sighting:
-        now = datetime.fromtimestamp(time.time())
-        sighting_time_local = last_sighting.datetime
+        # Get the current time in the user's local timezone (simplified to system local time)
+        now = datetime.fromtimestamp(time.time())  # Current time (system local time)
+        sighting_time_local = last_sighting.datetime  # Assuming datetime is stored in local time
 
         # Calculate the time difference from the most recent sighting
-        diff = now - sighting_time_local
+        diff = now - sighting_time_local  # The difference between now and the sighting time
         # Calculate days, hours, and minutes
         if diff.days == 0 and diff.seconds < 3600:  # Less than 1 hour (in seconds)
             minutes = diff.seconds // 60
@@ -57,15 +58,18 @@ def home():
 
     top_sightings = db.session.query(Sighting.user_id, func.count(Sighting.id).label('total_sightings'))\
         .group_by(Sighting.user_id).order_by(func.count(Sighting.id).desc()).limit(10).all()
+    about = """<p>Leaf blowers can be really annoying. Whether they are so noisy that you can't focus at work or parking on the side of your house's street making it hard to get past, I'm sure we all have a gripe with them.</p>
+        <br>
+        <p>Personally, I have had a problem with them since I was at college. The building I lived in at school was shaped like a "U", and I was on the inside of that "U".
+        The blowers would show up bright and early and the noise would echo off the walls of the building, and of course that is just a completly impossible situation to sleep in.
+        Eventually, I kept getting fed up with this so I started messaging one of my friends to let him know about this situation, and it turned into a bit of an inside joke where whenever one of us saw a leaf blower, we would text that gif you can see on this page to each other.</p>
+        <br>
+        <p>I made this site as a silly way to track whenever you see a leaf blower, and keep tabs on when other users see a leaf blower. It provided a way for me to learn some HTML and I'm planning to use the data collected from the logs in a machine learning project (probably just linear regression lol) but it should help me get more familiar with Python too.</p>
+        <br>
+        <p>Thanks for checking out this website! Here is a link to the github page so you can see the code: <a href="https://github.com/cesmit27/blower_tracker" target="_blank">https://github.com/cesmit27/blower_tracker</a></p>"""
+
 
     top_users = [{'user': User.query.get(user_id), 'total_sightings': total_sightings} for user_id, total_sightings in top_sightings]
-
-    try:
-        about_file_path = os.path.join(app.root_path, 'static', 'about.txt')
-        with open(about_file_path, 'r') as file:
-            about = file.read()
-    except FileNotFoundError:
-        about = "About content not available."
 
     return render_template('home.html', days_since=days_since, top_users=top_users, user=user, about=about, home_gif=home_gif)
 
@@ -98,16 +102,16 @@ def register():
         if existing_user:
             flash("Username already exists. Please choose a different one.")
             return redirect(url_for('register'))
-        
+
         user_timezone = request.form.get('timezone', 'UTC')
 
         # Hash the password and create the new user
         hashed_password = generate_password_hash(password)
         new_user = User(username=username, password=hashed_password, timezone=user_timezone)
-        
+
         db.session.add(new_user)
         db.session.commit()
-        
+
         flash("Account created successfully! Please log in.")
         return redirect(url_for('login'))
 
@@ -127,7 +131,7 @@ def leaderboard():
     user = User.query.get(user_id)  # Get the user from the database using the ID
 
     top_sightings = db.session.query(Sighting.user_id, func.count(Sighting.id).label('total_sightings'))\
-        .group_by(Sighting.user_id).order_by(func.count(Sighting.id).desc()).limit(10).all()
+        .group_by(Sighting.user_id).order_by(func.count(Sighting.id).desc()).limit(3).all()
     top_users = [{'user': User.query.get(user_id), 'total_sightings': total_sightings} for user_id, total_sightings in top_sightings]
     return render_template('leaderboard.html', top_users=top_users)
 
@@ -148,10 +152,12 @@ def log_sighting():
         return redirect(url_for('login'))
 
     user = User.query.get(session['user_id'])  # Get the logged-in user
-    
-    if request.method == 'POST':
-        now = datetime.fromtimestamp(time.time())
 
+    if request.method == 'POST':
+        # Get the current time in system local time (simplified for local use)
+        now = datetime.fromtimestamp(time.time())  # Define now in system local time
+
+        # Create the sighting object with the local time
         sighting = Sighting(
             user_id=session['user_id'],  # Use the logged-in user's ID
             blower_user=request.form.get('blower_user'),
@@ -165,7 +171,7 @@ def log_sighting():
             datetime=now,  # Store local time
             comment=request.form.get('comment')
         )
-        
+
         db.session.add(sighting)
         db.session.commit()
         return redirect(url_for('home'))
