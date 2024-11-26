@@ -9,7 +9,6 @@
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 
     <style>
-        /* General reset */
         * {
             margin: 0;
             padding: 0;
@@ -55,7 +54,7 @@
 
 
         h1 {
-            font-size: 32px;  /* Matching font size with user stats */
+            font-size: 32px;
             color: #333;
             margin-bottom: 20px;
             text-align: center;
@@ -85,7 +84,7 @@
         }
 
         ul li {
-            font-size: 16px;  /* Matching font size with user stats list items */
+            font-size: 16px;
             padding: 10px;
             border-bottom: 1px solid #ddd;
             margin-bottom: 10px;
@@ -110,7 +109,7 @@
 
         /* Underline and change color on hover */
         a:hover {
-            color: #4CAF50;  /* Green color for better emphasis */
+            color: #4CAF50;  /* Green color */
             text-decoration: underline;
         }
 
@@ -153,7 +152,7 @@
     </style>
 </head>
 <body>
-            <div class="container">
+        <div class="container">
         <!-- Logout Button -->
         <form action="{{ url_for('logout') }}" method="POST" style="display: inline;">
             <button type="submit" class="logout-btn">Logout</button>
@@ -162,7 +161,7 @@
         <a href="{{ url_for('log_sighting') }}" class="back-btn">Log a New Sighting</a>
         <h1>Who's Seen the Most Blowers?</h1>
         <h3>Click a user's name to see their logs!</h3>
-        <!-- Hide GIF until page is fully loaded -->
+        <!-- Hide GIF until page is fully loaded, helped with flashing issue-->
         <img id="loading-gif" src="{{ url_for('static', filename='lever.webp') }}">
         <br>
 
