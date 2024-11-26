@@ -29,7 +29,7 @@
     background-color: white;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 20px 40px; /* Added horizontal padding */
-    padding-left: 60px; /* Added extra padding to the left */
+    padding-left: 60px;
     margin-top: 30px;
     margin-bottom: 50px;
     border-radius: 8px;
@@ -77,11 +77,11 @@
 
     textarea {
     resize: none;
-    height: 48px; /* Matches the height of other input boxes */
+    height: 48px;
     }
 
     input[type="number"] {
-    height: 48px; /* Matches the height of other input boxes */
+    height: 48px;
     }
 
     button {
@@ -274,7 +274,7 @@
         const invalidPattern = /\b(fuck|f\*ck|f\*cking|bitch|b\*tch|shit|sh\*t|asshole|\*ssh\*l\*|cock|c\*ck|dick|d\*ck|dickhead|f\*ckw\*t|motherf\*cker|n\*gg\*r|p\*ssy|w\*nker|whore|sl\*g|wanker|w\*nk\*r|c\*nts?|b\*st\*rd|pr\*ck|tw\*t|c\*cks\*cker|di\*k|cl\*t|f\*g|p\*ck|b\*t\*ch|b\.i\.t\.c\.h|d\-i\-c\-k)\b/gi;
 
         if (invalidPattern.test(comment)) {
-        // Show the flash message with the warning and image
+        // Show the flash message with warning and image
         document.getElementById('flash-message').style.display = 'block';
         return false; // Prevent form submission
         }
