@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 import time
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key_here'
+app.secret_key = "It's a secret lol"
 app.config.from_object(Config)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
