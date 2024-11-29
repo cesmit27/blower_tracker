@@ -23,7 +23,6 @@
         }
 
         .container {
-            position: relative; /* Ensures child elements like logout-btn can be positioned relative to this container */
             max-width: 900px;
             margin: 0 auto;
             margin-top: 30px;
@@ -32,6 +31,17 @@
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        h3 {
+            text-align: center;
         }
 
         .logout-btn {
@@ -50,32 +60,6 @@
 
         .logout-btn:hover {
             background-color: #e53935;
-        }
-
-
-        h1 {
-            font-size: 32px;
-            color: #333;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        h3 {
-            text-align: center;
-        }
-
-                .logout-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 10px 15px;
-            background-color: #f44336;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
         }
 
         ul {
@@ -100,17 +84,28 @@
             background-color: #f1f1f1;
         }
 
+        .rank {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
         a {
+            flex: 1;
             text-decoration: none;
             color: #333;
             font-weight: bold;
             transition: color 0.3s ease;
         }
 
-        /* Underline and change color on hover */
         a:hover {
-            color: #4CAF50;  /* Green color */
+            color: #4CAF50;
             text-decoration: underline;
+        }
+
+        .sightings {
+            margin-left: auto;
+            font-size: 14px;
+            color: #555;
         }
 
         .links {
@@ -135,37 +130,32 @@
         .back-btn:hover {
             background-color: #89ca8a;
             text-decoration: underline;
-            color: #0000EE;  /* Change text color to blue */
+            color: #0000EE;
         }
 
-        /* Center the image within the container */
         #loading-gif {
-            display: block; /* Ensures the image is treated as a block element */
+            display: block;
             margin-left: auto;
             margin-right: auto;
             margin-top: 25px;
             margin-bottom: 25px;
-            max-width: 100%; /* ensures the image doesn't overflow */
+            max-width: 100%;
             height: auto;
-        }
-
+        }   
     </style>
 </head>
 <body>
-        <div class="container">
-        <!-- Logout Button -->
-        <form action="{{ url_for('logout') }}" method="POST" style="display: inline;">
-            <button type="submit" class="logout-btn">Logout</button>
-        </form>
+    <div class="container">
         <a href="{{ url_for('home') }}" class="back-btn">Home</a>
         <a href="{{ url_for('log_sighting') }}" class="back-btn">Log a New Sighting</a>
         <h1>Who's Seen the Most Blowers?</h1>
         <h3>Click a user's name to see their logs!</h3>
-        <!-- Hide GIF until page is fully loaded, helped with flashing issue-->
+        
+        <!--Hides gif until page loads to prevent flashing issue-->
         <img id="loading-gif" src="{{ url_for('static', filename='lever.webp') }}">
         <br>
-
-        <!-- Logout Button -->
+        
+        <!--Logout Button-->
         <form action="{{ url_for('logout') }}" method="POST" style="display: inline;">
             <button type="submit" class="logout-btn">Logout</button>
         </form>
@@ -173,10 +163,9 @@
         <ul>
             {% for entry in top_users %}
                 <li>
-                    <a href="{{ url_for('user_stats', username=entry.user.username) }}">
-                        {{ entry.user.username }}
-                    </a>
-                    <span>{{ entry.total_sightings }} sightings</span>
+                    <span class="rank">{{ loop.index }}. </span>
+                    <a href="{{ url_for('user_stats', username=entry.user.username) }}">{{ entry.user.username }}</a>
+                    <span class="sightings"><strong>{{ entry.total_sightings }} sightings</strong></span>
                 </li>
             {% endfor %}
         </ul>
