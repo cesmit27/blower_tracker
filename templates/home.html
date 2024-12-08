@@ -175,6 +175,19 @@
             margin-right: auto;
         }
 
+        a {
+            flex: 1;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #4CAF50;
+            text-decoration: underline;
+        }
+
         .about-container {
             max-width: 900px;
             width: 100%;
@@ -240,7 +253,7 @@
             {% endif %}
         </p>
         {% set latest_sighting = sightings[-1] %}
-        <p><strong>Most recent sighting by {{ latest_sighting.user.username }}</strong></p>
+         <p><strong>Most recent sighting by <a href="{{ url_for('user_stats', username=latest_sighting.user.username) }}">{{ latest_sighting.user.username }}</a></strong></p>
 
         <ul class="sighting-list">
             <li onclick="toggleDetails(this)">
