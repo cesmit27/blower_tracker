@@ -3,7 +3,6 @@
 <html lang="en">
 
 <head>
-    <meta name="google-site-verification" content="1Qj4luGLJhkkuyI-_II0MECgW3NvoK6hAd3GieXY0-c" />
     <meta charset="UTF-8">
     <title>Leaf Blower Tracker</title>
 
@@ -35,24 +34,27 @@
             padding: 20px;
             margin-top: 30px;
             border-radius: 8px;
-            position: relative; /* Enable positioning for child elements */
+            position: relative;
         }
 
         h1 {
-            font-size: 32px;  /* Matching font size with other pages */
+            font-size: 32px;
             color: #333;
             margin-bottom: 20px;
             text-align: center;
         }
 
         p {
-            font-size: 16px;  /* Consistent body font size */
+            font-size: 16px;
             color: #555;
             margin-bottom: 20px;
             text-align: center;
         }
 
-        /* Login greeting in the top-left corner */
+        .left-align {
+            text-align: left; /* Override to left-aligned */
+        }
+
         .login-greeting {
             position: absolute;
             top: 10px;
@@ -62,7 +64,6 @@
             color: #333;
         }
 
-        /* Logout button within the container at the top */
         .logout-btn {
             position: absolute;
             top: 10px;
@@ -81,41 +82,61 @@
             background-color: #e53935;
         }
 
-        /* List styles */
-        ul {
-            list-style-type: none;
+        /* List of sightings */
+        .sighting-list {
+            margin-top: 20px;
             padding: 0;
+            list-style: none;
         }
 
-        ul li {
-            font-size: 16px;  /* Consistent body font size */
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
+        .sighting-list li {
+            font-size: 16px;  /* Matching font size with leaderboard items */
+            background-color: #f2f2f2;
+            border: 1px solid #ddd;
+            padding: 15px;
             margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #f9f9f9;
             border-radius: 5px;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s;
+            cursor: pointer;
         }
 
-        ul li:hover {
+        .sighting-list li:hover {
             background-color: #f1f1f1;
         }
 
-        /* Link styling */
-        a {
-            text-decoration: none;
-            color: #333;
-            font-weight: bold;
-            transition: color 0.3s ease;
+        /* Hidden details for sightings */
+        .sighting-details {
+            display: none; /* Initially hide additional details */
+            padding-top: 10px;
+            margin-top: 10px;
+            border-top: 1px solid #ddd;
+            font-size: 14px;
+            color: #555;
         }
 
-        /* Underline and change color on hover */
-        a:hover {
-            color: #4CAF50;  /* Green color */
-            text-decoration: underline;
+        /* Anger level styling */
+        .anger-level {
+            font-weight: bold;
+            color: #555;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+        }
+
+        .anger-level span {
+            display: block; /* Forces each span to start on a new line */
+             margin-bottom: 5px; /* Adds space between each line */
+        }
+
+        /* Toggle icon for expanding/collapsing */
+        .toggle-icon {
+            font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-icon.open {
+            transform: rotate(180deg); /* Rotate the icon when expanded */
         }
 
         .back-btn {
@@ -135,29 +156,25 @@
         .back-btn:hover {
             background-color: #89ca8a;
             text-decoration: underline;
-            color: #0000EE;  /* Change text color to blue */
+            color: #0000EE;
         }
 
-        /* Links container with Flexbox for alignment */
         .links-container {
             display: flex;
             justify-content: center;
-            gap: 20px;  /* Space between the buttons */
+            gap: 20px;
             margin-top: 20px;
         }
 
-        /* Hide the GIF initially */
         #loading-gif {
             display: none;
-            max-width: auto;  /* Increased size (adjust value as needed) */
-            height: auto;      /* Maintains aspect ratio */
+            max-width: 100%;
             margin-top: 20px;
-            display: block;    /* Ensure block-level display for centering */
-            margin-left: auto; /* Center the GIF horizontally */
-            margin-right: auto; /* Center the GIF horizontally */
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        /* About the site container */
         .about-container {
             max-width: 900px;
             width: 100%;
@@ -168,7 +185,7 @@
             margin-bottom: 30px;
             border-radius: 8px;
             text-align: center;
-            display: none;  /* Hide the section by default */
+            display: none;
         }
 
         .about-container h2 {
@@ -182,7 +199,6 @@
             color: #555;
         }
 
-        /* Toggle About button */
         .toggle-about-btn {
             display: inline-block;
             margin-top: 20px;
@@ -199,26 +215,21 @@
 
         .toggle-about-btn:hover {
             text-decoration: underline;
-            color: #4CAF50;  /* Green color on hover */
+            color: #4CAF50;
         }
-
     </style>
 </head>
 
 <body>
-
     <div class="container">
-        <!-- Greeting in the top-left corner -->
         <div class="login-greeting">Logged in as {{ user.username }}</div>
 
-        <!-- Logout Button -->
         <form action="{{ url_for('logout') }}" method="POST" style="display: inline;">
             <button type="submit" class="logout-btn">Logout</button>
         </form>
 
         <h1>Leaf Blower Tracker</h1>
 
-        <!-- Hide GIF until page is fully loaded -->
         <img id="loading-gif" src="{{ url_for('static', filename=home_gif) }}">
 
         <p>
@@ -228,9 +239,28 @@
                 It has been {{ days_since }} since your last blower sighting.
             {% endif %}
         </p>
+        {% set latest_sighting = sightings[-1] %}
+        <p><strong>Most recent sighting by {{ latest_sighting.user.username }}</strong></p>
 
+        <ul class="sighting-list">
+            <li onclick="toggleDetails(this)">
+                <p class="anger-level">
+                    <span>{{ latest_sighting.datetime.strftime('%B %d, %Y %I:%M %p') }}. User Comments: {{ latest_sighting.comment }}</span>
+                    <span class="toggle-icon">&#9660;</span>
+                </p>
+                <div class="sighting-details">
+                    <p class="left-align"><strong>Anger Level:</strong> {{ latest_sighting.anger_level }}</p>
+                    <p class="left-align"><strong>Location:</strong> {{ latest_sighting.location }}</p>
+                    <p class="left-align"><strong>Blower User:</strong> {{ latest_sighting.blower_user }}</p>
+                    <p class="left-align"><strong>Blower Type:</strong> {{ latest_sighting.blower_type }}</p>
+                    <p class="left-align"><strong>Number of Blowers:</strong> {{ latest_sighting.num_blowers }}</p>
+                    <p class="left-align"><strong>Weather:</strong> {{ latest_sighting.weather }}</p>
+                    <p class="left-align"><strong>Noise Level:</strong> {{ latest_sighting.noise_level }}</p>
+                    <p class="left-align"><strong>Duration:</strong> {{ latest_sighting.duration }} minutes</p>
+                </div>
+            </li>
+        </ul>
 
-        <!-- Links for navigation -->
         <div class="links-container">
             <a href="{{ url_for('log_sighting') }}" class="back-btn">Log a New Sighting</a>
             <a href="{{ url_for('leaderboard') }}" class="back-btn">View Leaderboard</a>
@@ -238,17 +268,14 @@
         </div>
     </div>
 
-    <!-- Button to toggle About section -->
     <button class="toggle-about-btn" onclick="toggleAbout()">About This Site</button>
 
-    <!-- About the Site Section -->
     <div class="about-container">
         <h2>About Leaf Blower Tracker</h2>
         <p>{{ about | safe }}</p>
     </div>
 
     <script>
-        // Function to toggle the visibility of the About section
         function toggleAbout() {
             var aboutContainer = document.querySelector('.about-container');
             if (aboutContainer.style.display === 'none' || aboutContainer.style.display === '') {
@@ -258,12 +285,36 @@
             }
         }
 
-        // Wait for the page to load before showing the GIF
+        function toggleDetails(listItem) {
+            var details = listItem.querySelector('.sighting-details');
+            var icon = listItem.querySelector('.toggle-icon');
+            if (details.style.display === 'none' || details.style.display === '') {
+                details.style.display = 'block';
+                icon.innerHTML = '&#9650;';
+            } else {
+                details.style.display = 'none';
+                icon.innerHTML = '&#9660;';
+            }
+        }
+
+        function toggleDetails(item) {
+            var details = item.querySelector('.sighting-details');
+            var arrow = item.querySelector('.toggle-icon');
+
+            // Toggle the visibility of the details
+            if (details.style.display === 'none' || details.style.display === '') {
+                details.style.display = 'block';
+                arrow.style.transform = 'rotate(180deg)'; // Rotate arrow down
+            } else {
+                details.style.display = 'none';
+                arrow.style.transform = 'rotate(0deg)'; // Rotate arrow back to original
+            }
+        }
+
         window.onload = function() {
             document.getElementById('loading-gif').style.display = 'block';
         }
     </script>
-
 </body>
 
 </html>
