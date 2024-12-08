@@ -27,6 +27,7 @@ def home():
     user = User.query.get(user_id)  # Get the user from the database using the ID
 
     last_sighting = Sighting.query.filter_by(user_id=user_id).order_by(Sighting.datetime.desc()).first()
+    all_sightings_recent = Sighting.query.all()
     home_gif = "mad-angry.gif"
     days_since = "No sightings yet"
 
@@ -58,6 +59,7 @@ def home():
 
     top_sightings = db.session.query(Sighting.user_id, func.count(Sighting.id).label('total_sightings'))\
         .group_by(Sighting.user_id).order_by(func.count(Sighting.id).desc()).limit(10).all()
+
     about = """<p>Leaf blowers can be really annoying. Whether they are so noisy that you can't focus at work or parking on the side of your house's street making it hard to get past, I'm sure we all have a gripe with them.</p>
         <br>
         <p>Personally, I have had a problem with them since I was at college. The building I lived in at school was shaped like a "U", and I was on the inside of that "U".
@@ -71,7 +73,7 @@ def home():
 
     top_users = [{'user': User.query.get(user_id), 'total_sightings': total_sightings} for user_id, total_sightings in top_sightings]
 
-    return render_template('home.html', days_since=days_since, top_users=top_users, user=user, about=about, home_gif=home_gif)
+    return render_template('home.html', days_since=days_since, top_users=top_users, user=user, about=about, home_gif=home_gif, sightings=all_sightings_recent)
 
 
 @app.route('/login', methods=['GET', 'POST'])
