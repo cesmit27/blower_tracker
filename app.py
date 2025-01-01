@@ -139,7 +139,7 @@ def leaderboard():
     return render_template('leaderboard.html', top_users=top_users)
 
 @app.route('/<username>')
-def user_stats(username):
+def user_logs(username):
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
@@ -147,7 +147,7 @@ def user_stats(username):
     user = User.query.get(user_id)  # Get the user from the database using the ID
     user = User.query.filter_by(username=username).first_or_404()  # Fetch the user by username
     sightings = Sighting.query.filter_by(user_id=user.id).all()
-    return render_template('user_stats.html', user=user, sightings=sightings)
+    return render_template('user_logs.html', user=user, sightings=sightings)
 
 @app.route('/log', methods=['GET', 'POST'])
 def log_sighting():
