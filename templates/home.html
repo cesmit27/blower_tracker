@@ -253,7 +253,7 @@
             {% endif %}
         </p>
         {% set latest_sighting = sightings[-1] %}
-         <p><strong>Most recent sighting by <a href="{{ url_for('user_logs', username=latest_sighting.user.username) }}">{{ latest_sighting.user.username }}</a></strong></p>
+         <p>Most recent sighting by <strong><a href="{{ url_for('user_logs', username=latest_sighting.user.username) }}">{{ latest_sighting.user.username }}</a></strong></p>
 
         <ul class="sighting-list">
             <li onclick="toggleDetails(this)">
