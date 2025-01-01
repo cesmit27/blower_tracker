@@ -166,7 +166,7 @@
             {% for entry in top_users %}
                 <li>
                     <span class="rank">{{ loop.index }}. </span>
-                    <a href="{{ url_for('user_stats', username=entry.user.username) }}">{{ entry.user.username }}</a>
+                    <a href="{{ url_for('user_logs', username=entry.user.username) }}">{{ entry.user.username }}</a>
                     <span class="sightings"><strong>{{ entry.total_sightings }} sightings</strong></span>
                 </li>
             {% endfor %}
