@@ -235,7 +235,7 @@
 
 <body>
     <div class="container">
-        <div class="login-greeting">Logged in as {{ user.username }}</div>
+        <div class="login-greeting">Welcome, {{ user.username }}!</div>
 
         <form action="{{ url_for('logout') }}" method="POST" style="display: inline;">
             <button type="submit" class="logout-btn">Logout</button>
