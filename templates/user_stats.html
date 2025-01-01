@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ user.username }}'s Stats</title>
+    <title>{{ user.username }}'s Logs</title>
 
     <!-- Favicon link -->
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
@@ -22,7 +22,7 @@
             position: relative;
         }
     
-        /* Main container for the stats */
+        /* Main container for the logs */
         .container {
             max-width: 900px;
             width: 100%;
@@ -186,7 +186,7 @@
     
         <a href="{{ url_for('home') }}" class="back-btn">Home</a>
         <a href="{{ url_for('log_sighting') }}" class="back-btn">Log a New Sighting</a>
-        <h1>{{ user.username }}'s Stats</h1>
+        <h1>{{ user.username }}'s Logs</h1>
         <!-- Hide GIF until page is fully loaded -->
         <img id="loading-gif" src="{{ url_for('static', filename='chair.webp') }}" alt="Angry Emoji">
         <h3>Total Sightings: {{ user.sightings | length }}</h3>
