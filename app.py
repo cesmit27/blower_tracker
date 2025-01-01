@@ -56,6 +56,7 @@ def home():
             home_gif = "thin_ice.gif"
     else:
         days_since = "No sightings yet"
+        home_gif = "celebration.gif"
 
     top_sightings = db.session.query(Sighting.user_id, func.count(Sighting.id).label('total_sightings'))\
         .group_by(Sighting.user_id).order_by(func.count(Sighting.id).desc()).limit(10).all()
