@@ -21,7 +21,7 @@
             align-items: center;
             position: relative;
         }
-
+    
         /* Main container for the stats */
         .container {
             max-width: 900px;
@@ -33,29 +33,29 @@
             margin-bottom: 30px;
             border-radius: 8px;
             text-align: left;
-            position: relative;
+            position: relative; /* Added to position child elements within */
         }
-
+    
         h1 {
             font-size: 32px;  /* Matching font size with leaderboard */
             color: #333;
             margin-bottom: 20px;
             text-align: center;
         }
-
+    
         p {
             font-size: 16px;  /* Consistent body font size */
             color: #555;
             margin-bottom: 20px;
         }
-
+    
         /* List of sightings */
         .sighting-list {
             margin-top: 20px;
             padding: 0;
             list-style: none;
         }
-
+    
         .sighting-list li {
             font-size: 16px;  /* Matching font size with leaderboard items */
             background-color: #f2f2f2;
@@ -66,20 +66,11 @@
             transition: background-color 0.3s;
             cursor: pointer;
         }
-
+    
         .sighting-list li:hover {
             background-color: #f1f1f1;
         }
-
-        /* Anger level styling */
-        .anger-level {
-            font-weight: bold;
-            color: #555;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
+        
         /* Hidden details for sightings */
         .sighting-details {
             display: none; /* Initially hide additional details */
@@ -89,35 +80,26 @@
             font-size: 14px;
             color: #555;
         }
-
+    
+        /* Anger level styling */
+        .anger-level {
+            font-weight: bold;
+            color: #555;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    
         /* Toggle icon for expanding/collapsing */
         .toggle-icon {
             font-size: 18px;
             transition: transform 0.3s ease;
         }
-
+    
         .toggle-icon.open {
-            transform: rotate(180deg); /* Rotate the icon when expanded for cool animation 😎 */
+            transform: rotate(180deg); /* Rotate the icon when expanded */
         }
-
-        /* General button styling */
-        .logout-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            background-color: #f44336;
-            color: white;
-            transition: background-color 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            background-color: #e53935;
-        }
-
+    
         .back-btn {
             display: inline-block;
             margin: 10px;
@@ -131,13 +113,31 @@
             text-align: center;
             text-decoration: none;
         }
-
+    
         .back-btn:hover {
             background-color: #89ca8a;
             text-decoration: underline;
             color: #0000EE;  /* Change text color to blue */
         }
-
+    
+        .logout-btn {
+            position: absolute; /* Positioned within the container */
+            top: 10px;
+            right: 10px;
+            padding: 10px 15px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+    
+        .logout-btn:hover {
+            background-color: #e53935;
+        }
+    
         /* Links container for buttons */
         .back-btn-container {
             display: flex;
@@ -147,7 +147,7 @@
             max-width: 900px;  /* Restrict to the max container width */
             margin-top: 30px;
         }
-
+    
         /* Links (a) styling */
         a {
             text-decoration: none;
@@ -155,17 +155,17 @@
             font-weight: bold;
             transition: color 0.3s ease;
         }
-
+    
         a:hover {
-            color: #4CAF50;  /* Green color */
+            color: #4CAF50;  /* Green color for better emphasis */
             text-decoration: underline;
         }
-
+        
         .anger-level span {
             display: block; /* Forces each span to start on a new line */
             margin-bottom: 5px; /* Adds space between each line */
         }
-
+    
         /* Center the image within the container */
         #loading-gif {
             display: block; /* Ensures the image is treated as a block element */
@@ -174,36 +174,27 @@
             margin-bottom: 25px;
             max-width: 100%; /* ensures the image doesn't overflow */
             height: auto;
-        }
-
-        /* Top-right logout button inside the container */
-        .logout-container {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
-    </style>
+        }   
+    </style>    
 
 </head>
 <body>
-
     <div class="container">
-        <!-- Logout Button -->
-        <div class="logout-container">
-            <form action="{{ url_for('logout') }}" method="POST" style="display: inline;">
-                <button type="submit" class="logout-btn">Logout</button>
-            </form>
-        </div>
+        <form action="{{ url_for('logout') }}" method="POST" style="display: inline;">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    
         <a href="{{ url_for('home') }}" class="back-btn">Home</a>
         <a href="{{ url_for('log_sighting') }}" class="back-btn">Log a New Sighting</a>
         <h1>{{ user.username }}'s Stats</h1>
         <!-- Hide GIF until page is fully loaded -->
         <img id="loading-gif" src="{{ url_for('static', filename='chair.webp') }}" alt="Angry Emoji">
         <h3>Total Sightings: {{ user.sightings | length }}</h3>
-        <h6>Time is displayed in UTC since I couldnt get it to work for local users time.</h6>
-        <h6>UTC is 4 hours ahead of EDT (Eastern Daylight Time) during daylight saving time, and 5 hours ahead of EST (Eastern Standard Time) when daylight saving time is not observed.</h6>
+        <h5>Time is displayed in UTC since I couldnt get it to work for local users time.</h5>
+        <h5>UTC is 4 hours ahead of EDT (Eastern Daylight Time) during daylight saving time, and 5 hours ahead of EST (Eastern Standard Time) when daylight saving time is not observed.</h5>
+    
         <ul class="sighting-list">
-            {% for sighting in sightings|reverse %}
+            {% for sighting in sightings | reverse %}
             <li onclick="toggleDetails(this)">
                 <p class="anger-level">
                     <span>{{ sighting.datetime.strftime('%B %d, %Y %I:%M %p') }}. User Comments: {{ sighting.comment }}</span>
@@ -222,7 +213,7 @@
             </li>
             {% endfor %}
         </ul>
-    </div>
+    </div>    
 
     <script>
         // Toggle the visibility of the sighting details
