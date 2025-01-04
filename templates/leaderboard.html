@@ -133,7 +133,16 @@
             text-decoration: underline;
             color: #0000EE;
         }
-    
+
+        /* Secondary Container */
+         .stats-container {
+            text-align: left;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
         #loading-gif {
             display: block;
             margin-left: auto;
@@ -162,22 +171,25 @@
             <button type="submit" class="logout-btn">Logout</button>
         </form>
 
-        <ul>
-            {% for entry in top_users %}
-                <li>
-                    <span class="rank">{{ loop.index }}. </span>
-                    <a href="{{ url_for('user_logs', username=entry.user.username) }}">{{ entry.user.username }}</a>
-                    
-                    <span class="sightings"><strong>{{ entry.total_sightings }} total sighting{% if entry.total_sightings != 1 %}s{% endif %}.</strong></span>
-                    {% if entry.sightings|length > 0 %}
-                        <!-- Display the most recent sighting with matching formatting -->
-                        <span class="sightings">
-                            <strong> &nbsp;Most recent sighting: {{ entry.sightings[0].datetime.strftime('%B %d, %Y') }}.</strong>
-                        </span>
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
+        <div class="stats-container">
+            <ul>
+                {% for entry in top_users %}
+                    <li>
+                        <span class="rank">{{ loop.index }}. </span>
+                        <a href="{{ url_for('user_logs', username=entry.user.username) }}">{{ entry.user.username }}</a>
+                        
+                        <span class="sightings"><strong>{{ entry.total_sightings }} total sighting{% if entry.total_sightings != 1 %}s{% endif %}.</strong></span>
+                        {% if entry.sightings|length > 0 %}
+                            <!-- Display the most recent sighting with matching formatting -->
+                            <span class="sightings">
+                                <strong> &nbsp;Most recent sighting: {{ entry.sightings[0].datetime.strftime('%B %d, %Y') }}.</strong>
+                            </span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>               
+        </div>
+        
     </div>
 </body>
 </html>
