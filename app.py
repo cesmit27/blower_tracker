@@ -133,9 +133,16 @@ def leaderboard():
     user_id = session['user_id']  # Get the logged-in user's ID
     user = User.query.get(user_id)  # Get the user from the database using the ID
 
+    # Fetch the top 10 users with the most sightings
     top_sightings = db.session.query(Sighting.user_id, func.count(Sighting.id).label('total_sightings'))\
         .group_by(Sighting.user_id).order_by(func.count(Sighting.id).desc()).limit(10).all()
-    top_users = [{'user': User.query.get(user_id), 'total_sightings': total_sightings} for user_id, total_sightings in top_sightings]
+    
+    # For each user, fetch their sightings, sorted by datetime in descending order (most recent first)
+    top_users = []
+    for user_id, total_sightings in top_sightings:
+        sightings = Sighting.query.filter_by(user_id=user_id).order_by(Sighting.datetime.desc()).all()  # Fetch sightings for each user
+        top_users.append({'user': User.query.get(user_id), 'total_sightings': total_sightings, 'sightings': sightings})
+
     return render_template('leaderboard.html', top_users=top_users)
 
 @app.route('/<username>')
