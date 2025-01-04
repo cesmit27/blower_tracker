@@ -139,11 +139,27 @@ def leaderboard():
     
     # For each user, fetch their sightings, sorted by datetime in descending order (most recent first)
     top_users = []
+    anger_levels = defaultdict(list)  # Store anger levels for each user
+
     for user_id, total_sightings in top_sightings:
         sightings = Sighting.query.filter_by(user_id=user_id).order_by(Sighting.datetime.desc()).all()  # Fetch sightings for each user
         top_users.append({'user': User.query.get(user_id), 'total_sightings': total_sightings, 'sightings': sightings})
 
-    return render_template('leaderboard.html', top_users=top_users)
+        # Collect anger levels for calculating the average
+        for sighting in sightings:
+            anger_levels[user_id].append(sighting.anger_level)
+    
+    user_avg_anger = {
+        user_id: sum(anger_levels[user_id]) / len(anger_levels[user_id]) 
+        for user_id in anger_levels
+    }
+
+    # Get the user with the highest average anger level
+    angriest_user_id = max(user_avg_anger, key=user_avg_anger.get)
+    angriest_user = User.query.get(angriest_user_id)
+    angriest_user_avg_anger = round(user_avg_anger[angriest_user_id], 2)
+
+    return render_template('leaderboard.html',top_users=top_users, angriest_user=angriest_user, angriest_user_avg_anger=angriest_user_avg_anger)
 
 @app.route('/<username>')
 def user_logs(username):
