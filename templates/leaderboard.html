@@ -167,7 +167,14 @@
                 <li>
                     <span class="rank">{{ loop.index }}. </span>
                     <a href="{{ url_for('user_logs', username=entry.user.username) }}">{{ entry.user.username }}</a>
-                    <span class="sightings"><strong>{{ entry.total_sightings }} sightings</strong></span>
+                    
+                    <span class="sightings"><strong>{{ entry.total_sightings }} total sighting{% if entry.total_sightings != 1 %}s{% endif %}.</strong></span>
+                    {% if entry.sightings|length > 0 %}
+                        <!-- Display the most recent sighting with matching formatting -->
+                        <span class="sightings">
+                            <strong> &nbsp;Most recent sighting: {{ entry.sightings[0].datetime.strftime('%B %d, %Y') }}.</strong>
+                        </span>
+                    {% endif %}
                 </li>
             {% endfor %}
         </ul>
