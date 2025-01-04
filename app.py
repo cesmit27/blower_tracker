@@ -1,8 +1,7 @@
 # app.py
 from flask import Flask, render_template, redirect, url_for, request, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy#from flask_migrate import Migrate
 from sqlalchemy import func
 from config import Config
 from models import db, User, Sighting
@@ -171,8 +170,132 @@ def user_logs(username):
     user_id = session['user_id']  # Get the logged-in user's ID
     user = User.query.get(user_id)  # Get the user from the database using the ID
     user = User.query.filter_by(username=username).first_or_404()  # Fetch the user by username
+    
+    # Fetch sightings for this user
     sightings = Sighting.query.filter_by(user_id=user.id).all()
-    return render_template('user_logs.html', user=user, sightings=sightings)
+
+    # Create a DataFrame from sightings
+    sightings_df = pd.DataFrame([{
+        'id': sighting.id,
+        'datetime': sighting.datetime,
+        'comment': sighting.comment,
+        'anger_level': sighting.anger_level,
+        'weather': sighting.weather,
+        'location': sighting.location,
+        'blower_user': sighting.blower_user,
+        'blower_type': sighting.blower_type,
+        'num_blowers': sighting.num_blowers,
+        'noise_level': sighting.noise_level,
+        'duration': sighting.duration
+    } for sighting in sightings])
+
+    # Convert the 'datetime' column to string first
+    sightings_df['datetime'] = sightings_df['datetime'].astype(str)
+
+    # Strip fractional seconds
+    sightings_df['datetime'] = sightings_df['datetime'].apply(
+        lambda x: x.split('.')[0] if '.' in x else x
+    )
+
+    # Convert back to datetime type after removing fractional seconds
+    sightings_df['datetime'] = pd.to_datetime(sightings_df['datetime'], errors='coerce')
+
+    # Extract just the date for date-specific analyses
+    sightings_df['date'] = sightings_df['datetime'].dt.date
+
+    # Drop rows with invalid datetime values (NaT)
+    sightings_df = sightings_df.dropna(subset=['date'])
+
+    # Stats Calculations
+    # 1. Total Number of Blowers
+    sightings_df['num_blowers'] = pd.to_numeric(sightings_df['num_blowers'])
+    total_blowers = sightings_df['num_blowers'].sum()
+
+    # 2. Time Spent Listening
+    # Calculate total time in minutes
+    noise_time = sightings_df['duration'].sum()
+
+    # Constants for time conversion
+    MINUTES_IN_HOUR = 60
+    HOURS_IN_DAY = 24
+    DAYS_IN_MONTH = 30.436875
+    DAYS_IN_YEAR = 365.25
+
+    # Convert total minutes to years, months, days, hours, and minutes
+    years, remaining_minutes = divmod(noise_time, MINUTES_IN_HOUR * HOURS_IN_DAY * DAYS_IN_YEAR)
+    months, remaining_minutes = divmod(remaining_minutes, MINUTES_IN_HOUR * HOURS_IN_DAY * DAYS_IN_MONTH)
+    days, remaining_minutes = divmod(remaining_minutes, MINUTES_IN_HOUR * HOURS_IN_DAY)
+    hours, minutes = divmod(remaining_minutes, MINUTES_IN_HOUR)
+
+    # Build the formatted time string
+    time_parts = []
+    if years > 0:
+        time_parts.append(f"{years:.0f} year{'s' if years != 1 else ''}")
+    if months > 0:
+        time_parts.append(f"{months:.0f} month{'s' if months != 1 else ''}")
+    if days > 0:
+        time_parts.append(f"{days:.0f} day{'s' if days != 1 else ''}")
+    if hours > 0:
+        time_parts.append(f"{hours:.0f} hour{'s' if hours != 1 else ''}")
+    if minutes > 0:
+        time_parts.append(f"{minutes:.0f} minute{'s' if minutes != 1 else ''}")
+
+    # Combine the parts into a single string
+    formatted_time = ', '.join(time_parts) if time_parts else "0 minutes"
+
+    # 3. Avg Anger Level
+    sightings_df['anger_level'] = pd.to_numeric(sightings_df['anger_level'])
+    avg_angry = sightings_df['anger_level'].mean().round(2)
+
+    # 4. Avg Noise Level
+    sightings_df['noise_level'] = pd.to_numeric(sightings_df['noise_level'])
+    avg_noise = sightings_df['noise_level'].mean().round(2)
+
+    # 5. Most Common Weather Type
+    weather_counts = sightings_df['weather'].value_counts().reset_index()
+    weather_counts.columns = ['weather', 'count']
+
+    # Get the row with the most common weather
+    most_common_weather = weather_counts.loc[weather_counts['count'].idxmax()]
+
+    # Extract the most common weather type and its count
+    most_common_weather_type = most_common_weather['weather']
+    most_common_weather_count = most_common_weather['count']
+
+    # Create the string with the most common weather and its count
+    weather_string = f"<b>Most Common Weather Type:</b> {most_common_weather_type}<br><b>Number of Times Seen:</b> {most_common_weather_count}"
+
+    # 6. Longest Streak of Sightings
+    sightings_df['streak_id'] = (sightings_df['date'] != sightings_df['date'].shift(1) + pd.Timedelta(1, 'D')).cumsum()
+    streaks = sightings_df.groupby('streak_id').agg(streak_length=('date', 'count')).reset_index()
+    longest_streak = streaks['streak_length'].max()
+
+    # 7. Longest Drought (periods without sightings)
+    full_dates = pd.date_range(sightings_df['date'].min(), sightings_df['date'].max(), freq='D')
+    full_dates_df = pd.DataFrame(full_dates, columns=['date'])
+    sightings_df['date'] = pd.to_datetime(sightings_df['date'], errors='coerce')
+
+    missing_dates = pd.merge(full_dates_df, sightings_df[['date']], on='date', how='left', indicator=True)
+    missing_dates = missing_dates[missing_dates['_merge'] == 'left_only']
+    missing_dates['drought_id'] = (missing_dates['date'] != missing_dates['date'].shift(1) + pd.Timedelta(1, 'D')).cumsum()
+    drought_streaks = missing_dates.groupby('drought_id').size().reset_index(name='drought_length')
+    longest_drought = drought_streaks['drought_length'].max() if not drought_streaks.empty else 0
+
+    # Return the stats page with combined data
+    return render_template(
+        'user_logs.html',
+        user=user,
+        user_id=session['user_id'],
+        sightings=sightings,
+        total_blowers=total_blowers,
+        formatted_time=formatted_time,
+        avg_angry=avg_angry,
+        avg_noise=avg_noise,
+        most_common_weather=most_common_weather,
+        weather_string=weather_string,
+        longest_streak=longest_streak,
+        longest_drought=longest_drought
+    )
 
 @app.route('/log', methods=['GET', 'POST'])
 def log_sighting():
