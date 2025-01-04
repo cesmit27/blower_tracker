@@ -1,7 +1,8 @@
 # app.py
 from flask import Flask, render_template, redirect, url_for, request, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_sqlalchemy import SQLAlchemy#from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from sqlalchemy import func
 from config import Config
 from models import db, User, Sighting
@@ -137,7 +138,7 @@ def leaderboard():
     # Fetch the top 10 users with the most sightings
     top_sightings = db.session.query(Sighting.user_id, func.count(Sighting.id).label('total_sightings'))\
         .group_by(Sighting.user_id).order_by(func.count(Sighting.id).desc()).limit(10).all()
-    
+
     # For each user, fetch their sightings, sorted by datetime in descending order (most recent first)
     top_users = []
     anger_levels = defaultdict(list)  # Store anger levels for each user
@@ -149,9 +150,9 @@ def leaderboard():
         # Collect anger levels for calculating the average
         for sighting in sightings:
             anger_levels[user_id].append(sighting.anger_level)
-    
+
     user_avg_anger = {
-        user_id: sum(anger_levels[user_id]) / len(anger_levels[user_id]) 
+        user_id: sum(anger_levels[user_id]) / len(anger_levels[user_id])
         for user_id in anger_levels
     }
 
@@ -170,7 +171,7 @@ def user_logs(username):
     user_id = session['user_id']  # Get the logged-in user's ID
     user = User.query.get(user_id)  # Get the user from the database using the ID
     user = User.query.filter_by(username=username).first_or_404()  # Fetch the user by username
-    
+
     # Fetch sightings for this user
     sightings = Sighting.query.filter_by(user_id=user.id).all()
 
