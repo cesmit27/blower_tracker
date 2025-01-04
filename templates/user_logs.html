@@ -80,6 +80,15 @@
             font-size: 14px;
             color: #555;
         }
+
+        /* Secondary container */
+        .stats-container {
+            text-align: left;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
     
         /* Anger level styling */
         .anger-level {
@@ -189,8 +198,9 @@
         <h1>{{ user.username }}'s Logs</h1>
         <!-- Hide GIF until page is fully loaded -->
         <img id="loading-gif" src="{{ url_for('static', filename='chair.webp') }}" alt="Angry Emoji">
+        
+        <div class="stats-container">
         <h3>Total Sightings: {{ user.sightings | length }}</h3>
-    
         <ul class="sighting-list">
             {% for sighting in sightings | reverse %}
             <li onclick="toggleDetails(this)">
@@ -211,6 +221,7 @@
             </li>
             {% endfor %}
         </ul>
+        </div>
     </div>    
 
     <script>
