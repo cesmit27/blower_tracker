@@ -8,6 +8,8 @@ from config import Config
 from models import db, User, Sighting
 from datetime import datetime, timedelta
 import time
+import pandas as pd
+from collections import defaultdict
 
 app = Flask(__name__)
 app.secret_key = "It's a secret lol"
