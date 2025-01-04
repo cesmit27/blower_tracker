@@ -162,7 +162,10 @@
         <h1>Who's Seen the Most Blowers?</h1>
         <h3>Click a user's name to see their logs!</h3>
         <br>
-        <h3>Angriest User: {{ angriest_user.username }} (Average Anger Level: {{ angriest_user_avg_anger }})</h3>
+        
+        <div style="text-align: center;">
+            <span>Angriest User: <a href="{{ url_for('user_logs', username=angriest_user.username) }}">{{ angriest_user.username }}</a> (Average Anger Level: {{ angriest_user_avg_anger }})</span>
+        </div>
         
         <!--Hides gif until page loads to prevent flashing issue-->
         <img id="loading-gif" src="{{ url_for('static', filename='lever.webp') }}">
