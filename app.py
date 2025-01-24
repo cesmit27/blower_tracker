@@ -138,21 +138,25 @@ def leaderboard():
     # Fetch the top 10 users with the most sightings
     top_sightings = db.session.query(Sighting.user_id, func.count(Sighting.id).label('total_sightings'))\
         .group_by(Sighting.user_id).order_by(func.count(Sighting.id).desc()).limit(10).all()
-
+    
     # For each user, fetch their sightings, sorted by datetime in descending order (most recent first)
     top_users = []
     anger_levels = defaultdict(list)  # Store anger levels for each user
+    noise_levels = defaultdict(list)
 
     for user_id, total_sightings in top_sightings:
         sightings = Sighting.query.filter_by(user_id=user_id).order_by(Sighting.datetime.desc()).all()  # Fetch sightings for each user
         top_users.append({'user': User.query.get(user_id), 'total_sightings': total_sightings, 'sightings': sightings})
 
-        # Collect anger levels for calculating the average
+        # Collect levels for calculating the average
         for sighting in sightings:
             anger_levels[user_id].append(sighting.anger_level)
 
+        for sighting in sightings:
+            noise_levels[user_id].append(sighting.noise_level)
+    
     user_avg_anger = {
-        user_id: sum(anger_levels[user_id]) / len(anger_levels[user_id])
+        user_id: sum(anger_levels[user_id]) / len(anger_levels[user_id]) 
         for user_id in anger_levels
     }
 
@@ -161,7 +165,16 @@ def leaderboard():
     angriest_user = User.query.get(angriest_user_id)
     angriest_user_avg_anger = round(user_avg_anger[angriest_user_id], 2)
 
-    return render_template('leaderboard.html',top_users=top_users, angriest_user=angriest_user, angriest_user_avg_anger=angriest_user_avg_anger)
+    user_avg_noise = {
+        user_id: sum(noise_levels[user_id]) / len(noise_levels[user_id]) 
+        for user_id in noise_levels
+    }
+    # Get the user with the most hearing damage
+    noise_user_id = max(user_avg_noise, key=user_avg_noise.get)
+    noise_user = User.query.get(noise_user_id)
+    noise_user_avg_noise = round(user_avg_noise[noise_user_id], 2)
+
+    return render_template('leaderboard.html',top_users=top_users, angriest_user=angriest_user, angriest_user_avg_anger=angriest_user_avg_anger, noise_user=noise_user, noise_user_avg_noise=noise_user_avg_noise)
 
 @app.route('/<username>')
 def user_logs(username):
