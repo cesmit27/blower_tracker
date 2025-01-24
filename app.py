@@ -139,7 +139,7 @@ def leaderboard():
     top_sightings = db.session.query(Sighting.user_id, func.count(Sighting.id).label('total_sightings'))\
         .group_by(Sighting.user_id).order_by(func.count(Sighting.id).desc()).limit(10).all()
 
-    # For each user, fetch their sightings, sorted by datetime in descending order (most recent first)
+   # For each user, fetch their sightings, sorted by datetime in descending order (most recent first)
     top_users = []
     anger_levels = defaultdict(list)  # Store anger levels for each user
     noise_levels = defaultdict(list)
@@ -177,6 +177,15 @@ def leaderboard():
         angriest_user = None
         angriest_user_avg_anger = None
 
+    # Get the most chill user (least angry)
+    if user_avg_anger:
+        most_chill_user_id = min(user_avg_anger, key=user_avg_anger.get)
+        most_chill_user = User.query.get(most_chill_user_id)
+        most_chill_user_avg_anger = round(user_avg_anger[most_chill_user_id], 2)
+    else:
+        most_chill_user = None
+        most_chill_user_avg_anger = None
+
     # Calculate average noise levels for users with 10 or more sightings
     user_avg_noise = {
         user_id: sum(noise_levels[user_id]) / len(noise_levels[user_id])
@@ -192,8 +201,15 @@ def leaderboard():
         noise_user = None
         noise_user_avg_noise = None
 
-    # Render the template with top users, angriest user, and noisiest user
-    return render_template('leaderboard.html', top_users=top_users, angriest_user=angriest_user, angriest_user_avg_anger=angriest_user_avg_anger, noise_user=noise_user, noise_user_avg_noise=noise_user_avg_noise)
+    # Render the template with top users, angriest user, noisiest user, and most chill user
+    return render_template('leaderboard.html',
+                           top_users=top_users,
+                           angriest_user=angriest_user,
+                           angriest_user_avg_anger=angriest_user_avg_anger,
+                           noise_user=noise_user,
+                           noise_user_avg_noise=noise_user_avg_noise,
+                           most_chill_user=most_chill_user,
+                           most_chill_user_avg_anger=most_chill_user_avg_anger)
 
 @app.route('/<username>')
 def user_logs(username):
