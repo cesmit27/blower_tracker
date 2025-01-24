@@ -168,6 +168,10 @@
         </div>
 
         <div style="text-align: center;">
+            <span>Most Chill User: <a href="{{ url_for('user_logs', username=most_chill_user.username) }}">{{ most_chill_user.username }}</a> (Average Anger Level: {{ most_chill_user_avg_anger }})</span>
+        </div>
+
+        <div style="text-align: center;">
             <span>User With Most Hearing Damage: <a href="{{ url_for('user_logs', username=noise_user.username) }}">{{ noise_user.username }}</a> (Average Noise Level: {{ noise_user_avg_noise }})</span>
         </div>
         
