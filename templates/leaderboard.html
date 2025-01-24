@@ -166,6 +166,10 @@
         <div style="text-align: center;">
             <span>Angriest User: <a href="{{ url_for('user_logs', username=angriest_user.username) }}">{{ angriest_user.username }}</a> (Average Anger Level: {{ angriest_user_avg_anger }})</span>
         </div>
+
+        <div style="text-align: center;">
+            <span>User With Most Hearing Damage: <a href="{{ url_for('user_logs', username=noise_user.username) }}">{{ noise_user.username }}</a> (Average Noise Level: {{ noise_user_avg_noise }})</span>
+        </div>
         
         <!--Hides gif until page loads to prevent flashing issue-->
         <img id="loading-gif" src="{{ url_for('static', filename='lever.webp') }}">
