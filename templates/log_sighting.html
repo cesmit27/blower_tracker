@@ -154,7 +154,7 @@
         <!-- Hide GIF until page is fully loaded -->
         <img id="loading-gif" src="{{ url_for('static', filename='what.webp') }}" style="max-width: 100%; height: auto;"> <!-- Prevent overflow -->
 
-        <form method="POST" onsubmit="return validateComment()">
+       <form method="POST" onsubmit="return validateComment()">
         <!-- Blower User Dropdown -->
         <label for="blower_user">Blower User:</label>
         <select name="blower_user" id="blower_user" required>
@@ -165,8 +165,8 @@
         <!-- Blower Type Dropdown -->
         <label for="blower_type">Blower Type:</label>
         <select name="blower_type" id="blower_type" required>
-        <option value="Electric">Electric</option>
         <option value="Gas">Gas</option>
+        <option value="Electric">Electric</option>
         </select>
 
         <!-- Number of Blowers Dropdown -->
@@ -189,17 +189,20 @@
         <select name="location" id="location" required>
         <option value="Residential">Residential</option>
         <option value="Shopping Center">Shopping Center</option>
+        <option value="Downtown">Downtown</option>
         <option value="Park">Park</option>
+        <option value="Corporate Park">Corporate Park</option>
         <option value="Industrial">Industrial</option>
+        <option value="Other">Other</option>
         </select>
 
         <!-- Weather Dropdown -->
         <label for="weather">Weather:</label>
         <select name="weather" id="weather" required>
-        <option value="Sunny">Sunny</option>
-        <option value="Rainy">Rainy</option>
+        <option value="Clear">Clear</option>
         <option value="Cloudy">Cloudy</option>
         <option value="Windy">Windy</option>
+        <option value="Rainy">Rainy</option>
         <option value="Other">Other</option>
         </select>
 
