@@ -3,3 +3,4 @@ The purpose of this website was to help me learn some web development with pytho
 The website is a way to log when you see a leaf blower (something that annoys me, check the about on the website for more)
 
 Contact: blower_tracker@proton.me
+Bluesky Account: https://bsky.app/profile/blowertracker.bsky.social
