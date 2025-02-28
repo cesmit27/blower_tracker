@@ -4,4 +4,4 @@ The website is a way to log when you see a leaf blower (something that annoys me
 
 Contact: blower_tracker@proton.me
 
-Bluesky Account: https://bsky.app/profile/blowertracker.bsky.social
+<a href="https://bsky.app/profile/blowertracker.bsky.social" target="_blank" rel="noopener noreferrer">Bluesky Account</a>
