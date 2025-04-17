@@ -15,6 +15,7 @@ from dotenv import load_dotenv
 
 #loads environment variables (such as the secret key)
 load_dotenv()
+#print("SECRET_KEY from .env:", os.getenv('SECRET_KEY')) I used this to ensure it was reading correct secret key
 
 app = Flask(__name__)
 app.config.from_object(Config)
