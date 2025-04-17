@@ -12,10 +12,11 @@ import pandas as pd
 from collections import defaultdict
 import os
 from dotenv import load_dotenv
+
+#loads environment variables (such as the secret key)
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.getenv("SECRET_KEY")
 app.config.from_object(Config)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
