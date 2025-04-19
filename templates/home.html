@@ -233,6 +233,37 @@
             color: #4CAF50;
         }
 
+        /* Mobile styles */
+        html {
+            -webkit-text-size-adjust: 100%;   /* Prevent iOS from auto‑shrinking fonts */
+            }
+
+        @media (pointer: coarse) {
+            .collapsible-title {
+                font-size: 40px;
+            }
+            .anger-level {
+                font-size: 28px;
+            }
+            .sighting-details {
+            font-size: 28px;
+            }
+            .stats-container ul {
+            font-size: 28px;
+            }
+            .back-btn, .logout-btn {
+            display: grid;
+            font-size: 25px;
+            place-items: center;
+            }
+            p{
+            font-size: 28px;
+            }
+            .about-container p{
+            font-size: 25px;
+            }
+    }
+
     </style>
 </head>
 
@@ -257,7 +288,7 @@
         <ul class="sighting-list">
             <li onclick="toggleDetails(this)">
                 <p class="anger-level">
-                    <span>{{ latest_sighting.datetime.strftime('%B %d, %Y') }}. User Comments: {{ latest_sighting.comment }}</span>
+                    <span>{{ latest_sighting.datetime.strftime('%B %d, %Y') }}<br> User Comments: {{ latest_sighting.comment }}</span>
                     <span class="toggle-icon">&#9660;</span>
                 </p>
                 <div class="sighting-details">
@@ -299,7 +330,7 @@
     >
     </bsky-embed>
     <br>
-    
+
     <button class="toggle-about-btn" onclick="toggleAbout()">About This Site</button>
 
     <div class="about-container">
