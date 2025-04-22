@@ -41,12 +41,20 @@
 
         /* Flash messages */
         .flash-messages {
-            background-color: #ffe0e0;
-            color: #d8000c;
             padding: 1rem;
             border-radius: 4px;
             margin-bottom: 1rem;
             text-align: left;
+        }
+
+        .flash-message.error {
+            background-color: #ffe0e0;
+            color: #d8000c;
+        }
+
+        .flash-message.success {
+            background-color: #e0ffe0;
+            color: #006400;
         }
 
         .flash-messages p {
@@ -146,13 +154,13 @@
         <h1>Register</h1>
 
         <!-- Flash message display -->
-        {% with messages = get_flashed_messages() %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-        <div class="flash-messages">
-            {% for message in messages %}
-            <p>{{ message }}</p>
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">
+                    <p>{{ message }}</p>
+                </div>
             {% endfor %}
-        </div>
         {% endif %}
         {% endwith %}
 
