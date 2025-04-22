@@ -93,7 +93,7 @@ def login():
         if user and check_password_hash(user.password, password):
             session['user_id'] = user.id  # Store user_id in session
             return redirect(url_for('home'))
-        flash("Invalid username or password")
+        flash("Invalid username or password", "error")
     return render_template('login.html')
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -126,7 +126,7 @@ def register():
         return redirect(url_for('login'))
 
     return render_template('register.html')
-
+    
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
     session.pop('user_id', None)  # Clear user_id from session
