@@ -104,13 +104,13 @@ def register():
 
          # Check if the username contains spaces
         if ' ' in username:
-            flash("Username cannot contain spaces. Please choose a different one.")
+            flash("Username cannot contain spaces. Please choose a different one.", "error")
             return redirect(url_for('register'))
 
         # Check if the username already exists
         existing_user = User.query.filter_by(username=username).first()
         if existing_user:
-            flash("Username already exists. Please choose a different one.")
+            flash("Username already exists. Please choose a different one.", "error")
             return redirect(url_for('register'))
 
         user_timezone = request.form.get('timezone', 'UTC')
@@ -122,7 +122,7 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
-        flash("Account created successfully! Please log in.")
+        flash("Account created successfully! Please log in.", "success")
         return redirect(url_for('login'))
 
     return render_template('register.html')
