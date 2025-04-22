@@ -39,27 +39,34 @@
             color: #444;
         }
 
-        /* Flash messages */
-        .flash-messages {
+       /* FLASH MESSAGES */
+        .flash-message {
             padding: 1rem;
             border-radius: 4px;
             margin-bottom: 1rem;
-            text-align: left;
+            text-align: center;
+            font-weight: bold;
+            border: 1px solid transparent;
         }
 
+        /* ERROR */
         .flash-message.error {
-            background-color: #ffe0e0;
-            color: #d8000c;
-        }
+            background-color: #ffe0e0 !important;
+            color: #d8000c !important;
+            border-color: #d8000c !important;
+            }
 
+        /* SUCCESS */
         .flash-message.success {
-            background-color: #e0ffe0;
-            color: #006400;
-        }
+            background-color: #e0ffe0 !important;
+            color: #006400 !important;
+            border-color: #006400 !important;
+            }
 
-        .flash-messages p {
-            margin: 0;
-        }
+        .flash-message p {
+             margin: 0;
+            }
+
 
         /* Form styles */
         form {
