@@ -1,5 +1,5 @@
 # app.py
-from flask import Flask, render_template, redirect, url_for, request, session, flash
+from flask import Flask, render_template, redirect, url_for, request, session, flash, send_from_directory
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -382,6 +382,10 @@ def log_sighting():
         return redirect(url_for('home'))
 
     return render_template('log_sighting.html', user_id=session['user_id'])
+
+@app.route('/.well-known/atproto-did') #Custom handle on Bluesky account
+def serve_atproto_did():
+    return send_from_directory('well_known', 'atproto-did')
 
 @app.route('/test_flash') #Debugging flash messages
 def test_flash():
