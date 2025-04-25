@@ -194,7 +194,7 @@ def generate_line_chart(client, db_path, title, total_sightings):
     date_range_str = f"{first_date_formatted} - {last_date_formatted}"
 
     # Plot the line graph
-    plt.figure(figsize=(8, 8))  # Square figure size (8x8 inches)
+    plt.figure(figsize=(8, 8), dpi=300)  # Square figure size (8x8 inches)
     sns.set_theme(style="darkgrid", palette="husl")
 
     # Create the line plot
@@ -235,7 +235,7 @@ def generate_line_chart(client, db_path, title, total_sightings):
     # Save the figure to a temporary file
     with tempfile.NamedTemporaryFile(suffix='.png', delete=False) as tmp_file:
         try:
-            plt.savefig(tmp_file.name, bbox_inches='tight', pad_inches=0.1, dpi=100)  # Add 0.1 inches of padding
+            plt.savefig(tmp_file.name, bbox_inches='tight', pad_inches=0.1, dpi=300)  # Add 0.1 inches of padding
             plt.close()
 
             # Open the saved image with Pillow to remove metadata
