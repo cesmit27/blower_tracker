@@ -4,6 +4,7 @@ import datetime
 import pytz
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 import seaborn as sns
 from atproto import Client, models
 import logging
@@ -208,18 +209,17 @@ def generate_line_chart(client, db_path, title, total_sightings):
         markerfacecolor='#FF6F61',  # Coral color for markers
     )
 
+    # Force the y-axis to start at zero and use up to 8 integer ticks (1 tick always for 0, up to 7 other ticks, one for each day of the past week)
+    ax.set_ylim(bottom=0)
+    ax.yaxis.set_major_locator(MaxNLocator(nbins=8, integer=True))
+
     # Add labels and title
     plt.xlabel('Date', fontsize=12, fontweight='bold', labelpad=10)
     plt.ylabel('Number of Sightings', fontsize=12, fontweight='bold', labelpad=10)
     plt.title(f'{title} ({date_range_str})', fontsize=14, fontweight='bold', pad=15)
 
-    # Set y-axis to only show whole numbers
-    plt.gca().yaxis.set_major_locator(plt.MaxNLocator(integer=True))
-
-    # Format x-axis dates for better readability
+    # Format x-axis dates for better readability. Ensure that x-axis has 7 ticks, one for each day of the past week.
     plt.gca().xaxis.set_major_formatter(plt.matplotlib.dates.DateFormatter(date_format))
-
-    # Ensure the x-axis has exactly 7 ticks (one for each day of the previous week)
     plt.gca().xaxis.set_major_locator(plt.MaxNLocator(7))
 
     # Add gridlines for better readability
