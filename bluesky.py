@@ -210,7 +210,7 @@ def generate_line_chart(client, db_path, title, total_sightings):
     )
 
     # Force the y-axis to start at zero and use up to 8 integer ticks (1 tick always for 0, up to 7 other ticks, one for each day of the past week)
-    ax.set_ylim(bottom=0)
+    ax.set_ylim(bottom=-0.1) #This is slightly less than 0 so that if there is a day with no sightings the marker doesn't get cut off
     ax.yaxis.set_major_locator(MaxNLocator(nbins=8, integer=True))
 
     # Add labels and title
