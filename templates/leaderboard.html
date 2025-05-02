@@ -38,10 +38,9 @@
             font-size: 32px;
             color: #333;
             margin-bottom: 20px;
-            text-align: center;
         }
 
-        h3 {
+        h1, h2, h3 {
             text-align: center;
         }
 
@@ -176,8 +175,11 @@
     <div class="container">
         <a href="{{ url_for('home') }}" class="back-btn">Home</a>
         <a href="{{ url_for('log_sighting') }}" class="back-btn">Log a New Sighting</a>
+        <br>
         <h1>Who's Seen the Most Blowers?</h1>
         <h3>Click a user's name to see their logs!</h3>
+        <br>
+        <h2>Total Blowers Seen: {{ total_blowers }}</h2>
         <br>
 
         <div style="text-align: center;">
