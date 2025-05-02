@@ -33,6 +33,8 @@ def home():
     user_id = session['user_id']  # Get the logged-in user's ID
     user = User.query.get(user_id)  # Get the user from the database using the ID
 
+    total_blowers = db.session.query(func.sum(Sighting.num_blowers)).scalar() #Scalar returns only the value instead of a tuple/list
+
     last_sighting = Sighting.query.filter_by(user_id=user_id).order_by(Sighting.datetime.desc()).first()
     all_sightings_recent = Sighting.query.all()
     home_gif = "mad-angry.gif"
@@ -81,7 +83,7 @@ def home():
 
     top_users = [{'user': User.query.get(user_id), 'total_sightings': total_sightings} for user_id, total_sightings in top_sightings]
 
-    return render_template('home.html', days_since=days_since, top_users=top_users, user=user, about=about, home_gif=home_gif, sightings=all_sightings_recent)
+    return render_template('home.html', total_blowers=total_blowers, days_since=days_since, top_users=top_users, user=user, about=about, home_gif=home_gif, sightings=all_sightings_recent)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -126,7 +128,7 @@ def register():
         return redirect(url_for('login'))
 
     return render_template('register.html')
-    
+
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
     session.pop('user_id', None)  # Clear user_id from session
@@ -139,6 +141,8 @@ def leaderboard():
 
     user_id = session['user_id']  # Get the logged-in user's ID
     user = User.query.get(user_id)  # Get the user from the database using the ID
+
+    total_blowers = db.session.query(func.sum(Sighting.num_blowers)).scalar() #Scalar returns only the value instead of a tuple/list
 
     # Fetch the top 10 users with the most sightings
     top_sightings = db.session.query(Sighting.user_id, func.count(Sighting.id).label('total_sightings'))\
@@ -208,13 +212,14 @@ def leaderboard():
 
     # Render the template with top users, angriest user, noisiest user, and most chill user
     return render_template('leaderboard.html',
-                           top_users=top_users,
-                           angriest_user=angriest_user,
-                           angriest_user_avg_anger=angriest_user_avg_anger,
-                           noise_user=noise_user,
-                           noise_user_avg_noise=noise_user_avg_noise,
-                           most_chill_user=most_chill_user,
-                           most_chill_user_avg_anger=most_chill_user_avg_anger)
+                        total_blowers=total_blowers,
+                        top_users=top_users,
+                        angriest_user=angriest_user,
+                        angriest_user_avg_anger=angriest_user_avg_anger,
+                        noise_user=noise_user,
+                        noise_user_avg_noise=noise_user_avg_noise,
+                        most_chill_user=most_chill_user,
+                        most_chill_user_avg_anger=most_chill_user_avg_anger)
 
 @app.route('/<username>')
 def user_logs(username):
