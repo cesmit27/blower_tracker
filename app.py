@@ -35,6 +35,11 @@ def home():
 
     total_blowers = db.session.query(func.sum(Sighting.num_blowers)).scalar() #Scalar returns only the value instead of a tuple/list
 
+    sightings = Sighting.query.filter_by(user_id=user.id).all()
+    sightings_df = pd.DataFrame([{'num_blowers': sighting.num_blowers} for sighting in sightings])
+    sightings_df['num_blowers'] = pd.to_numeric(sightings_df['num_blowers'])
+    user_total_blowers = sightings_df['num_blowers'].sum()
+
     last_sighting = Sighting.query.filter_by(user_id=user_id).order_by(Sighting.datetime.desc()).first()
     all_sightings_recent = Sighting.query.all()
     home_gif = "mad-angry.gif"
@@ -83,7 +88,7 @@ def home():
 
     top_users = [{'user': User.query.get(user_id), 'total_sightings': total_sightings} for user_id, total_sightings in top_sightings]
 
-    return render_template('home.html', total_blowers=total_blowers, days_since=days_since, top_users=top_users, user=user, about=about, home_gif=home_gif, sightings=all_sightings_recent)
+    return render_template('home.html', total_blowers=total_blowers, user_total_blowers=user_total_blowers, days_since=days_since, top_users=top_users, user=user, about=about, home_gif=home_gif, sightings=all_sightings_recent)
 
 
 @app.route('/login', methods=['GET', 'POST'])
