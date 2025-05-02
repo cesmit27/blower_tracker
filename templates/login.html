@@ -30,7 +30,7 @@
             padding: 2rem;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            width: 20%;
             text-align: center;
         }
 
@@ -144,7 +144,13 @@
 
 <body>
     <div class="login-container">
+        <h1>
+            <img src="{{ url_for('static', filename='favicon.ico') }}" alt="Logo" style="height: 36px; vertical-align: top; margin-right: 4px;">
+        Blower Tracker
+        </h1>
+        <h3>Total Blowers Seen: {{ total_blowers }}</h3>
         <h1>Login</h1>
+        <br>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
