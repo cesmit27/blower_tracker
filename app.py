@@ -93,6 +93,8 @@ def home():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    total_blowers = db.session.query(func.sum(Sighting.num_blowers)).scalar() #Scalar returns only the value instead of a tuple/list
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -101,7 +103,7 @@ def login():
             session['user_id'] = user.id  # Store user_id in session
             return redirect(url_for('home'))
         flash("Invalid username or password", "error")
-    return render_template('login.html')
+    return render_template('login.html', total_blowers=total_blowers)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
