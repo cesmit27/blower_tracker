@@ -41,6 +41,9 @@
             font-size: 32px;
             color: #333;
             margin-bottom: 20px;
+        }
+
+        h1,h2,p {
             text-align: center;
         }
 
@@ -48,7 +51,6 @@
             font-size: 16px;
             color: #555;
             margin-bottom: 20px;
-            text-align: center;
         }
 
         .left-align {
@@ -276,6 +278,8 @@
         </form>
 
         <h1>Leaf Blower Tracker</h1>
+
+        <h2>Total Blowers Seen by Everyone: {{ total_blowers }}</h2>
 
         <img id="loading-gif" src="{{ url_for('static', filename=home_gif) }}">
 
