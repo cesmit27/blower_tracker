@@ -12,7 +12,6 @@
     /* General styles */
     body {
         font-family: Arial, sans-serif;
-        background-color: #f4f7f6;
         color: #333;
         margin: 0;
         padding: 0;
@@ -21,6 +20,20 @@
         align-items: center;
         position: relative;
     }
+
+     body::before {
+          content: "";
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background-image: url("{{ url_for('static', filename='blurry-gradient-haikei.svg') }}");
+          background-repeat: no-repeat;
+          background-position: center center;
+          background-size: cover;
+          z-index: -1;
+        }
 
     .container {
         max-width: 900px;
