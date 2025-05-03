@@ -255,52 +255,53 @@
         <h1>{{ user.username }}'s Stats and Logs</h1>
         <img id="loading-gif" src="{{ url_for('static', filename='chair.gif') }}" alt="Angry Emoji">
 
-        <!-- Stats Section -->
-        <div class="stats-container">
-            <div class="collapsible-title" >
-                <p class="header">User Stats</p> </span>
-            </div>
-            <ul>
-                <li><b>Total Sightings:</b> {{ user.sightings | length }}</li>
-                <li><b>Individual Blowers Seen:</b> {{ total_blowers }}</li>
-                <li><b>Time Spent Hearing Blowers:</b> {{ formatted_time }}</li>
-                <li><b>Average Anger Level:</b> {{ avg_angry }}</li>
-                <li><b>Average Noise Level:</b> {{ avg_noise }}</li>
-                <li><b>Longest Streak:</b> {{ longest_streak }} day{% if longest_streak != 1 %}s{% endif %}</li>
-                <li><b>Longest Drought:</b> {{ longest_drought }} day{% if longest_drought != 1 %}s{% endif %}</li>
+    {% if sightings %}
+    <!-- Stats Section -->
+    <div class="stats-container">
+        <div class="collapsible-title"><p class="header">User Stats</p></div>
+        <ul>
+            <li><b>Total Sightings:</b> {{ user.sightings | length }}</li>
+            <li><b>Individual Blowers Seen:</b> {{ total_blowers }}</li>
+            <li><b>Time Spent Hearing Blowers:</b> {{ formatted_time }}</li>
+            <li><b>Average Anger Level:</b> {{ avg_angry }}</li>
+            <li><b>Average Noise Level:</b> {{ avg_noise }}</li>
+            <li><b>Longest Streak:</b> {{ longest_streak }} day{% if longest_streak != 1 %}s{% endif %}</li>
+            <li><b>Longest Drought:</b> {{ longest_drought }} day{% if longest_drought != 1 %}s{% endif %}</li>
+        </ul>
+    </div>
+
+    <!-- Logs Section -->
+    <div class="stats-container">
+        <div class="collapsible-title" onclick="toggleCollapsible(this)"><p class="header">Logs</p> <span class="toggle-icon">&#9660;</span></div>
+        <div class="collapsible-content">
+            <ul class="sighting-list">
+                {% for sighting in sightings | reverse %}
+                <li onclick="toggleDetails(this)">
+                    <p class="header">
+                        <b>{{ sighting.datetime.strftime('%B %d, %Y') }}<br>User Comments: {{ sighting.comment }}</b>
+                        <span class="toggle-icon">&#9660;</span>
+                    </p>
+                    <div class="sighting-details">
+                        <p><strong>Anger Level:</strong> {{ sighting.anger_level }}</p>
+                        <p><strong>Location:</strong> {{ sighting.location }}</p>
+                        <p><strong>Blower User:</strong> {{ sighting.blower_user }}</p>
+                        <p><strong>Blower Type:</strong> {{ sighting.blower_type }}</p>
+                        <p><strong>Number of Blowers:</strong> {{ sighting.num_blowers }}</p>
+                        <p><strong>Weather:</strong> {{ sighting.weather }}</p>
+                        <p><strong>Noise Level:</strong> {{ sighting.noise_level }}</p>
+                        <p><strong>Duration:</strong> {{ sighting.duration }} minutes</p>
+                    </div>
+                </li>
+                <br>
+                {% endfor %}
             </ul>
         </div>
-
-        <!-- Logs Section -->
-        <div class="stats-container">
-            <div class="collapsible-title" onclick="toggleCollapsible(this)">
-                <p class="header">Logs</p> <span class="toggle-icon">&#9660;</span>
-            </div>
-            <div class="collapsible-content">
-                <ul class="sighting-list">
-                    {% for sighting in sightings | reverse %}
-                    <li onclick="toggleDetails(this)">
-                        <p class="header">
-                            <b>{{ sighting.datetime.strftime('%B %d, %Y') }}<br>User Comments: {{ sighting.comment }}</b>
-                            <span class="toggle-icon">&#9660;</span>
-                        </p>
-                        <div class="sighting-details">
-                            <p><strong>Anger Level:</strong> {{ sighting.anger_level }}</p>
-                            <p><strong>Location:</strong> {{ sighting.location }}</p>
-                            <p><strong>Blower User:</strong> {{ sighting.blower_user }}</p>
-                            <p><strong>Blower Type:</strong> {{ sighting.blower_type }}</p>
-                            <p><strong>Number of Blowers:</strong> {{ sighting.num_blowers }}</p>
-                            <p><strong>Weather:</strong> {{ sighting.weather }}</p>
-                            <p><strong>Noise Level:</strong> {{ sighting.noise_level }}</p>
-                            <p><strong>Duration:</strong> {{ sighting.duration }} minutes</p>
-                        </div>
-                    </li>
-                    <br>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
     </div>
+    {% else %}
+    <br>
+    <p style="text-align: center; font-size: 26px; margin-top: 20px;"><strong>You haven't logged any blowers yet!</strong></p>
+    {% endif %}
+</div>
 
     <script>
         function toggleDetails(item) {
