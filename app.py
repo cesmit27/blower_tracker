@@ -252,6 +252,15 @@ def user_logs(username):
     # Fetch sightings for this user
     sightings = Sighting.query.filter_by(user_id=user.id).all()
 
+    # If there are no sightings, don' render anything except a Text that says "No sightings" or something like that
+    if not sightings:
+        return render_template(
+            'user_logs.html',
+            user=user,
+            user_id=session['user_id'],
+            no_sightings=True
+        )
+
     # Create a DataFrame from sightings
     sightings_df = pd.DataFrame([{
         'id': sighting.id,
@@ -372,7 +381,8 @@ def user_logs(username):
         most_common_weather=most_common_weather,
         weather_string=weather_string,
         longest_streak=longest_streak,
-        longest_drought=longest_drought
+        longest_drought=longest_drought,
+        no_sightings=False
     )
 
 @app.route('/log', methods=['GET', 'POST'])
