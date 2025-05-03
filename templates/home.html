@@ -16,13 +16,26 @@
         /* General styles */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f7f6;
             color: #333;
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
+        }
+
+        body::before {
+          content: "";
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background-image: url("{{ url_for('static', filename='blurry-gradient-haikei.svg') }}");
+          background-repeat: no-repeat;
+          background-position: center center;
+          background-size: cover;
+          z-index: -1;
         }
 
         /* Main container for content */
@@ -314,11 +327,11 @@
             <a href="{{ url_for('leaderboard') }}" class="back-btn">View Leaderboard</a>
             <a href="{{ url_for('user_logs', username=user.username) }}" class="back-btn">Your Logs</a>
         </div>
-    </div>
-    <br>
+
+        <br><br>
 
     <h1>
-      <svg width="40" height="40" viewBox="0 0 150 150" fill="currentColor" style="vertical-align: middle;">
+        <svg width="40" height="40" viewBox="0 0 150 150" fill="currentColor" style="vertical-align: middle;">
         <path d="M48.2009 127.867C39.1474 128.882 32.7627 123.94 26.413 118.429C17.337 110.55 11.7439 98.8133 19.3119 89.6194C26.6425 80.7138 41.2263 78.5339 41.2263 78.5339C41.2263 78.5339 23.4428 80.8709 12.3719 71.0199C6.72602 65.9962 3.55921 59.4268 2.77416 51.8266C1.76431 42.0502 0.117374 22.047 0.00376359 14.662C-0.12467 6.31322 3.04015 0.732097 8.55502 0.117877C21.7513-1.35186 37.2532 11.0643 52.3174 29.4249C66.959 47.2703 72.6953 59.8939 72.6953 59.8939C72.6953 59.8939 78.4315 47.2703 93.0731 29.4249C108.137 11.0643 123.639-1.35186 136.835 0.117877C142.35 0.732097 145.515 6.31322 145.387 14.662C145.273 22.047 143.626 42.0502 142.616 51.8266C141.831 59.4268 138.664 65.9962 133.019 71.0199C121.948 80.8709 104.164 78.5339 104.164 78.5339C104.164 78.5339 118.748 80.7138 126.079 89.6194C133.647 98.8133 128.054 110.55 118.978 118.429C112.628 123.94 106.243 128.882 97.1896 127.867C80.7219 126.02 72.6953 95.3316 72.6953 95.3316C72.6953 95.3316 64.6686 126.02 48.2009 127.867Z" fill="#029bff" fill-rule="nonzero" opacity="1" stroke="none"/>
       </svg>
       Bluesky Profile
@@ -334,6 +347,8 @@
     custom-styles=".w-full { font-size: 1.2em; }"
     >
     </bsky-embed>
+    <br>
+    </div>
     <br>
 
     <button class="toggle-about-btn" onclick="toggleAbout()">About This Site</button>
