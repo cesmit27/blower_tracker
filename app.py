@@ -91,10 +91,7 @@ def home():
         <br>
         <p>Thanks for checking out this website! Here is a link to the github page so you can see the code: <a href="https://github.com/cesmit27/blower_tracker" target="_blank">https://github.com/cesmit27/blower_tracker</a></p>"""
 
-    top_users = [
-        {'user': User.query.get(uid), 'total_sightings': total}
-        for uid, total in top_sightings
-    ]
+    top_users = [{'user': User.query.get(user_id), 'total_sightings': total_sightings} for user_id, total_sightings in top_sightings]
 
     return render_template(
         'home.html',
