@@ -33,13 +33,20 @@ def home():
     user_id = session['user_id']  # Get the logged-in user's ID
     user = User.query.get(user_id)  # Get the user from the database using the ID
 
-    total_blowers = db.session.query(func.sum(Sighting.num_blowers)).scalar() #Scalar returns only the value instead of a tuple/list
+    total_blowers = db.session.query(func.sum(Sighting.num_blowers)).scalar() or 0  # Scalar returns only the value instead of a tuple/list; default to 0 if None
 
     sightings = Sighting.query.filter_by(user_id=user.id).all()
-    sightings_df = pd.DataFrame([{'num_blowers': sighting.num_blowers} for sighting in sightings])
-    sightings_df['num_blowers'] = pd.to_numeric(sightings_df['num_blowers'])
-    user_total_blowers = sightings_df['num_blowers'].sum()
 
+    # Compute this user's total blowers, guard against empty list
+    if sightings:
+        sightings_df = pd.DataFrame([{'num_blowers': sighting.num_blowers} for sighting in sightings])
+        sightings_df['num_blowers'] = pd.to_numeric(sightings_df['num_blowers'])
+        user_total_blowers = sightings_df['num_blowers'].sum()
+    else:
+        # Brand-new user: no sightings yet
+        user_total_blowers = 0
+
+    # Leave your last_sighting definition exactly as it is
     last_sighting = Sighting.query.filter_by(user_id=user_id).order_by(Sighting.datetime.desc()).first()
     all_sightings_recent = Sighting.query.all()
     home_gif = "mad-angry.gif"
@@ -60,20 +67,19 @@ def home():
         elif diff.days == 0 and diff.seconds < 86400:  # Less than 24 hours, but more than 1 hour
             hours = diff.seconds // 3600
             minutes = (diff.seconds % 3600) // 60
-            days_since = f"{hours} hour{'s' if hours > 1 else ''} and {minutes} minute{'s' if minutes > 1 else ''} "
+            days_since = f"{hours} hour{'s' if hours > 1 else ''} and {minutes} minute{'s' if minutes > 1 else ''}"
             home_gif = "button.gif"
         elif diff.days == 1:
-            days_since = "1 day "
+            days_since = "1 day"
             home_gif = "diep.gif"
         else:  # More than 1 day ago
-            days_since = f"{diff.days} days "
+            days_since = f"{diff.days} days"
             home_gif = "thin_ice.gif"
     else:
         days_since = "No sightings yet"
         home_gif = "celebration.gif"
 
-    top_sightings = db.session.query(Sighting.user_id, func.count(Sighting.id).label('total_sightings'))\
-        .group_by(Sighting.user_id).order_by(func.count(Sighting.id).desc()).limit(10).all()
+    top_sightings = db.session.query(Sighting.user_id,func.count(Sighting.id).label('total_sightings')).group_by(Sighting.user_id).order_by(func.count(Sighting.id).desc()).limit(10).all()
 
     about = """<p>Leaf blowers can be really annoying. Whether they are so noisy that you can't focus at work or parking on the side of your house's street making it hard to get past, I'm sure we all have a gripe with them.</p>
         <br>
@@ -85,11 +91,22 @@ def home():
         <br>
         <p>Thanks for checking out this website! Here is a link to the github page so you can see the code: <a href="https://github.com/cesmit27/blower_tracker" target="_blank">https://github.com/cesmit27/blower_tracker</a></p>"""
 
+    top_users = [
+        {'user': User.query.get(uid), 'total_sightings': total}
+        for uid, total in top_sightings
+    ]
 
-    top_users = [{'user': User.query.get(user_id), 'total_sightings': total_sightings} for user_id, total_sightings in top_sightings]
-
-    return render_template('home.html', total_blowers=total_blowers, user_total_blowers=user_total_blowers, days_since=days_since, top_users=top_users, user=user, about=about, home_gif=home_gif, sightings=all_sightings_recent)
-
+    return render_template(
+        'home.html',
+        total_blowers=total_blowers,
+        user_total_blowers=user_total_blowers,
+        days_since=days_since,
+        top_users=top_users,
+        user=user,
+        about=about,
+        home_gif=home_gif,
+        sightings=all_sightings_recent
+    )
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -122,11 +139,9 @@ def register():
             flash("Username already exists. Please choose a different one.", "error")
             return redirect(url_for('register'))
 
-        user_timezone = request.form.get('timezone', 'UTC')
-
         # Hash the password and create the new user
         hashed_password = generate_password_hash(password)
-        new_user = User(username=username, password=hashed_password, timezone=user_timezone)
+        new_user = User(username=username, password=hashed_password)
 
         db.session.add(new_user)
         db.session.commit()
