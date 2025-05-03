@@ -10,7 +10,6 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
     sightings = db.relationship('Sighting', backref='user', lazy=True)
-    timezone = db.Column(db.String(100), default='UTC')
 
 class Sighting(db.Model):
     __tablename__ = 'sightings'
