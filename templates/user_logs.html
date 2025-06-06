@@ -8,20 +8,18 @@
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 
     <style>
-
-    /* General styles */
-    body {
-        font-family: Arial, sans-serif;
-        color: #333;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        position: relative;
-    }
-
-     body::before {
+        /* General styles */
+        body {
+          font-family: Arial, sans-serif;
+          color: #333;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          position: relative;
+        }
+        body::before {
           content: "";
           position: fixed;
           top: 0;
@@ -35,211 +33,233 @@
           z-index: -1;
         }
 
-    .container {
-        max-width: 900px;
-        width: 100%;
-        background-color: white;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-        margin: 30px auto;
-        border-radius: 8px;
-        text-align: left;
-        position: relative;
-    }
-
-    h1 {
-        font-size: 32px;
-        color: #333;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-
-    /* Center the GIF */
-    #loading-gif {
-        display: block;
-        margin: 20px auto;
-        max-width: 100%;
-    }
-
-    /* Stats container */
-    .stats-container {
-        text-align: left;
-        padding: 15px;
-        background-color: #f9f9f9;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-    }
-    .stats-container ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-    .stats-container li {
-        margin-bottom: 8px;
-    }
-
-    /* Buttons */
-    .back-btn, .logout-btn {
-        display: inline-block;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
-        text-decoration: none;
-        text-align: center;
-    }
-
-    .back-btn {
-            display: inline-block;
-            margin: 10px;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
+        /* Main glass container */
+        .container {
+          max-width: 900px;
+          width: 100%;
+          margin: 30px auto;
+          padding: 20px;
+          background: rgba(255,255,255,0.15);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(255,255,255,0.3);
+          border-radius: 12px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+          text-align: left;
+          position: relative;
         }
 
-        .back-btn:hover {
-            background-color: #89ca8a;
-            text-decoration: underline;
-            color: #0000EE;
+        /* Header */
+        h1 {
+          font-size: 48px;
+          color: #333;
+          margin-top: 50px;
+          margin-bottom: 20px;
+          text-align: center;
         }
 
-    .logout-btn {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background-color: #f44336;
-        color: white;
-        transition: background-color 0.3s ease;
-    }
-    .logout-btn:hover {
-        background-color: #e53935;
-    }
-
-    /* ==== Sightings list */
-    .sighting-list {
-        margin-top: 20px;
-        padding: 0;
-        list-style: none;
-    }
-    .sighting-list li {
-        font-size: 16px;
-        background-color: #f2f2f2;
-        border: 1px solid #ddd;
-        padding: 15px;
-        margin-bottom: 10px;
-        border-radius: 5px;
-        transition: background-color 0.3s;
-        cursor: pointer;
-    }
-    .sighting-list li:hover {
-        background-color: #f1f1f1;
-    }
-
-    /* Date/comment row: flex + bold + right‑aligned arrow */
-    .sighting-list li p.header {
-        display: flex;
-        align-items: center;
-        margin: 0;
-    }
-    .sighting-list li p.header strong {
-        font-weight: bold;
-    }
-    .sighting-list li p.header .toggle-icon {
-        margin-left: auto;
-    }
-
-    /* Hidden details panel with timing from home.html to try to have consistency */
-    .sighting-details {
-        max-height: 0;
-        overflow: hidden;
-        padding: 0 10px;
-        font-size: 16px;
-        line-height: 1.5;
-        color: #555;
-        transition: max-height 0.3s ease-out, padding 0.3s ease-out;
-    }
-    .sighting-details p {
-        margin: 10px 0;
-        font-weight: normal;
-    }
-    .sighting-details p strong {
-        font-weight: bold;
-    }
-
-    /* Toggle icon rotation */
-    .toggle-icon {
-        font-size: 18px;
-        transition: transform 0.3s ease;
-    }
-    .toggle-icon.open {
-        transform: rotate(180deg);
-    }
-
-    /* Expanded details */
-    .sighting-details.open {
-        max-height: 1000px;
-        padding: 10px;
-    }
-
-    /* Collapsible logs section title */
-    .collapsible-title {
-    cursor: pointer;
-    font-size: 24px;
-    font-weight: bold;
-    margin: 10px 0;
-    display: flex;
-    align-items: center;
-    transition: height 0.3s ease-out, padding 0.3s ease-out;
-    }
-
-    .collapsible-title .toggle-icon {
-    margin-left: auto;
-    }
-
-    .collapsible-content {
-        height: 0;
-        overflow: hidden;
-        transition: height 0.3s ease-out, padding 0.3s ease-out;
-    }
-
-    .collapsible-content.open {
-        height: auto;
-        padding: 10px;
-    }
-
-    /* Mobile styles */
-     html {
-        -webkit-text-size-adjust: 100%;   /* Prevent iOS from auto‑shrinking fonts */
-    }
-
-    @media (pointer: coarse) {
-        .collapsible-title {
-            font-size: 40px;
+        /* Center the GIF */
+        #loading-gif {
+          display: block;
+          margin: 20px auto;
+          max-width: 100%;
+          border-radius: 12px;
         }
-        .sighting-list li {
-            font-size: 28px;
-        }
-        .sighting-details {
-        font-size: 28px;
+
+        /* Glass stats panels */
+        .stats-container {
+          padding: 15px;
+          margin-bottom: 20px;
+          background: rgba(255,255,255,0.2);
+          backdrop-filter: blur(6px);
+          -webkit-backdrop-filter: blur(6px);
+          border: 1px solid rgba(255,255,255,0.3);
+          border-radius: 12px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+          text-align: left;
         }
         .stats-container ul {
-        font-size: 28px;
+          list-style: none;
+          padding: 0;
+          margin: 0;
         }
-        .back-btn, .logout-btn {
-        font-size: 25px;
+        .stats-container li {
+          margin-bottom: 8px;
         }
-    }
 
+        /* Makes it so the container with the User Stats doesn't change the mouse to the hand icon since you can't actually click anything in that container*/
+        .stats-container:first-of-type .collapsible-title {
+            display: inline-flex;
+            cursor: text;
+        }
+
+        /* Buttons container */
+        .links-header {
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          margin-bottom: 20px;
+        }
+
+        /* Back buttons */
+        .back-btn {
+          align-self: flex-start;
+          margin-right: 10px;
+          padding: 10px 20px;
+          background-color: rgba(76,175,80,0.95);
+          color: #fff;
+          border: 1px solid rgba(255,255,255,0.3);
+          border-radius: 12px;
+          font-size: 16px;
+          font-weight: bold;
+          text-decoration: none;
+          text-align: center;
+          cursor: pointer;
+          backdrop-filter: blur(5px);
+          -webkit-backdrop-filter: blur(5px);
+          transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
+        }
+        .back-btn:hover {
+          background-color: rgba(137,202,138,0.85);
+          text-decoration: underline;
+          color: #fff;
+        }
+
+        /* Logout button */
+        .logout-btn {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          padding: 10px 15px;
+          background-color: rgba(244,67,54,0.95);
+          color: #fff;
+          border: 1px solid rgba(255,255,255,0.3);
+          border-radius: 12px;
+          font-size: 16px;
+          font-weight: bold;
+          cursor: pointer;
+          backdrop-filter: blur(5px);
+          -webkit-backdrop-filter: blur(5px);
+          transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+          background-color: rgba(229,57,53,0.6);
+          text-decoration: underline;
+          color: #fff;
+        }
+
+        /* Sightings list items with glass look */
+        .sighting-list {
+            margin-top: 20px;
+            padding: 0;
+            list-style: none;
+        }
+        .sighting-list li {
+            font-size: 16px;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+              transition: background 0.3s ease;
+            cursor: pointer;
+        }
+        .sighting-list li:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Sighting header row */
+        .sighting-list li p.header {
+            display: flex;
+            align-items: center;
+            margin: 0;
+            color: #272424;
+        }
+        .sighting-list li p.header strong {
+            font-weight: bold;
+        }
+        .sighting-list li p.header .toggle-icon {
+            margin-left: auto;
+        }
+
+        /* Hidden details panel */
+        .sighting-details {
+            max-height: 0;
+            overflow: hidden;
+            padding: 0 10px;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #555;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+        }
+        .sighting-details p {
+            margin: 10px 0;
+            color: #393535;
+        }
+        .sighting-details p strong {
+            color: #272424;
+        }
+
+        .comment-text {
+            font-weight: normal;
+            color: #393535;
+        }
+
+        /* Toggle icon rotation */
+        .toggle-icon {
+          font-size: 18px;
+          transition: transform 0.3s ease;
+        }
+        .toggle-icon.open {
+          transform: rotate(180deg);
+        }
+
+        /* Collapsible section titles */
+        .collapsible-title {
+          cursor: pointer;
+          font-size: 24px;
+          font-weight: bold;
+          margin: 10px 0;
+          display: flex;
+          align-items: center;
+        }
+        .collapsible-title .toggle-icon {
+          margin-left: auto;
+        }
+        .collapsible-content {
+          height: 0;
+          overflow: hidden;
+          transition: height 0.3s ease-out, padding 0.3s ease-out;
+        }
+        .collapsible-content.open {
+          height: auto;
+          padding: 10px;
+        }
+
+        /* Mobile adjustments */
+        html {
+          -webkit-text-size-adjust: 100%;
+        }
+        @media (pointer: coarse) {
+          .collapsible-title {
+            font-size: 40px;
+          }
+          .sighting-list li,
+          .stats-container li {
+            font-size: 28px;
+          }
+          .back-btn,
+          .logout-btn {
+            font-size: 25px;
+          }
+          .sighting-details {
+              font-size: 25px;
+              color: black;
+          }
+        }
     </style>
 </head>
 
@@ -253,7 +273,7 @@
         <a href="{{ url_for('log_sighting') }}" class="back-btn">Log a New Sighting</a>
 
         <h1>{{ user.username }}'s Stats and Logs</h1>
-        <img id="loading-gif" src="{{ url_for('static', filename='chair.gif') }}" alt="Angry Emoji">
+        <img id="loading-gif" src="{{ url_for('static', filename='chair.gif') }}?v=2" alt="Angry Emoji"> <!-- ?v=2 helps make gif run on safari and firefox -->
 
     {% if sightings %}
     <!-- Stats Section -->
@@ -278,8 +298,12 @@
                 {% for sighting in sightings | reverse %}
                 <li onclick="toggleDetails(this)">
                     <p class="header">
-                        <b>{{ sighting.datetime.strftime('%B %d, %Y') }}<br>User Comments: {{ sighting.comment }}</b>
-                        <span class="toggle-icon">&#9660;</span>
+                        <b>
+                            {{ sighting.datetime.strftime('%B %d, %Y') }}<br>
+                            User Comments:
+                            <span class="comment-text">{{ sighting.comment }}</span>
+                        </b>
+                          <span class="toggle-icon">&#9660;</span>
                     </p>
                     <div class="sighting-details">
                         <p><strong>Anger Level:</strong> {{ sighting.anger_level }}</p>

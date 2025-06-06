@@ -19,62 +19,111 @@
             font-family: Arial, sans-serif;
             color: #333;
             margin: 2%;
+            position: relative;
         }
 
         body::before {
-          content: "";
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100vw;
-          height: 100vh;
-          background-image: url("{{ url_for('static', filename='blurry-gradient-haikei.svg') }}");
-          background-repeat: no-repeat;
-          background-position: center center;
-          background-size: cover;
-          z-index: -1;
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: url("{{ url_for('static', filename='blurry-gradient-haikei.svg') }}");
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+            z-index: -1;
         }
 
         .container {
-            max-width: 900px;
-            margin: 0 auto;
-            margin-top: 30px;
-            margin-bottom: 30px;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: relative; /* Enable positioning for child elements */
+          max-width: 900px;
+          width: 100%;
+          margin: 30px auto;
+          padding: 20px;
+          background: rgba(255,255,255,0.15);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(255,255,255,0.3);
+          border-radius: 12px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+          text-align: left;
+          position: relative;
         }
 
-        h1 {
-            font-size: 32px;
-            color: #333;
-            margin-bottom: 20px;
+        /* Buttons container */
+        .links {
+          display: flex;
+          align-items: flex-start;
+          margin-top: -10px;
+          margin-bottom: 20px;
         }
 
-        h1, h2, h3 {
-            text-align: center;
+        /* Back buttons */
+        .back-btn {
+          align-self: flex-start;
+          margin-right: 10px;
+          padding: 10px 20px;
+          background-color: rgba(76,175,80,0.95);
+          color: #fff;
+          border: 1px solid rgba(255,255,255,0.3);
+          border-radius: 12px;
+          font-size: 16px;
+          font-weight: bold;
+          text-decoration: none;
+          text-align: center;
+          cursor: pointer;
+          backdrop-filter: blur(5px);
+          -webkit-backdrop-filter: blur(5px);
+          transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
         }
 
+        .back-btn:hover {
+          background-color: rgba(137,202,138,0.85);
+          text-decoration: underline;
+          color: #fff;
+        }
+
+        /* Logout button */
         .logout-btn {
-            position: absolute; /* Position within the container */
-            top: 10px;
-            right: 10px;
-            padding: 10px 15px;
-            background-color: #f44336;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          padding: 10px 15px;
+          background-color: rgba(244,67,54,0.95);
+          color: #fff;
+          border: 1px solid rgba(255,255,255,0.3);
+          border-radius: 12px;
+          font-size: 16px;
+          font-weight: bold;
+          cursor: pointer;
+          backdrop-filter: blur(5px);
+          -webkit-backdrop-filter: blur(5px);
+          transition: background-color 0.3s ease;
         }
 
         .logout-btn:hover {
-            background-color: #e53935;
+          background-color: rgba(229,57,53,0.6);
+          text-decoration: underline;
+          color: #fff;
         }
 
+        /* GIF styling */
+        #loading-gif {
+            display: block;
+            margin: 25px auto;
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+        }
+
+        /* Headings */
+        h1, h2, h3 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        /* Leaderboard list */
         ul {
             list-style-type: none;
             padding: 0;
@@ -86,15 +135,16 @@
             border-bottom: 1px solid #ddd;
             margin-bottom: 10px;
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            background-color: #f9f9f9;
-            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
             transition: background-color 0.3s ease;
         }
 
         ul li:hover {
-            background-color: #f1f1f1;
+            background-color: rgba(255, 255, 255, 0.3);
         }
 
         .rank {
@@ -102,7 +152,7 @@
             font-weight: bold;
         }
 
-        a {
+        .stats-container a {
             flex: 1;
             text-decoration: none;
             color: #333;
@@ -110,84 +160,75 @@
             transition: color 0.3s ease;
         }
 
-        a:hover {
+        a:not(.back-btn) {
+          transition: color 0.3s ease;
+          text-decoration: none;
+        }
+
+        a:not(.back-btn):visited {
+          color: inherit;
+        }
+
+        a:not(.back-btn):hover {
             color: #4CAF50;
             text-decoration: underline;
         }
 
-        .sightings {
-            margin-left: auto;
-            font-size: 18px;
-            color: #555;
-        }
-
-        .links {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .back-btn {
-            display: inline-block;
-            margin: 10px;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
+        .sightings, .sightings2 {
             font-size: 16px;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
+            color: #555;
+            font-weight: bold;
         }
 
-        .back-btn:hover {
-            background-color: #89ca8a;
-            text-decoration: underline;
-            color: #0000EE;
-        }
-
-         /* Stats container */
-         .stats-container {
+        .stats-container {
             text-align: left;
             padding: 15px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        #loading-gif {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 25px;
-            margin-bottom: 25px;
-            max-width: 100%;
-            height: auto;
+            background: none;
+            border: none;
+            box-shadow: none;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
         }
 
         /* Mobile styles */
         html {
-            -webkit-text-size-adjust: 100%;   /* Prevent iOS from auto‑shrinking fonts */
-            }
-        @media (pointer: coarse) {
-            .back-btn, .logout-btn {
-            font-size: 25px;
-            }
-            div {
-            font-size: 25px;
-            }
-            .stats-container li {
-            font-size: 25px;
-            }
+            -webkit-text-size-adjust: 100%;
         }
 
-    </style>
+        @media (pointer: coarse) {
+            .back-btn, .logout-btn {
+                font-size: 25px;
+            }
 
+            div {
+                font-size: 25px;
+            }
+
+            .stats-container li {
+                font-size: 25px;
+            }
+
+            .sightings {
+            font-size: 20px;
+            color: black;
+            font-weight: normal;
+            }
+
+            .sightings2 {
+            font-size: 18px;
+            color: black;
+            font-weight: normal;
+            }
+        }
+    </style>
 </head>
+
 <body>
     <div class="container">
-        <a href="{{ url_for('home') }}" class="back-btn">Home</a>
-        <a href="{{ url_for('log_sighting') }}" class="back-btn">Log a New Sighting</a>
+        <div class="links">
+            <a href="{{ url_for('home') }}" class="back-btn">Home</a>
+            <a href="{{ url_for('log_sighting') }}" class="back-btn">Log a New Sighting</a>
+        </div>
         <br>
         <h1>Who's Seen the Most Blowers?</h1>
         <h3>Click a user's name to see their logs!</h3>
@@ -223,12 +264,10 @@
                         <span class="rank">{{ loop.index }}. </span>
                         <a href="{{ url_for('user_logs', username=entry.user.username) }}">{{ entry.user.username }}</a>
 
-                        <span class="sightings"><strong>{{ entry.total_sightings }} total sighting{% if entry.total_sightings != 1 %}s{% endif %}.</strong></span>
+                        <span class="sightings">{{ entry.total_sightings }} total sighting{% if entry.total_sightings != 1 %}s{% endif %}.</span>
                         {% if entry.sightings|length > 0 %}
                             <!-- Display the most recent sighting with matching formatting -->
-                            <span class="sightings">
-                                <strong> &nbsp;Most recent sighting: {{ entry.sightings[0].datetime.strftime('%B %d, %Y') }}.</strong>
-                            </span>
+                            <span class="sightings2"> &nbsp;Most recent sighting: {{ entry.sightings[0].datetime.strftime('%B %d, %Y') }}. </span>
                         {% endif %}
                     </li>
                 {% endfor %}

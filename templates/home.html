@@ -42,12 +42,21 @@
         .container {
             max-width: 900px;
             width: 100%;
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
             margin-top: 30px;
-            border-radius: 8px;
+            border-radius: 12px;
             position: relative;
+        }
+
+        .glass-inner {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            color: black;
         }
 
         h1 {
@@ -84,17 +93,22 @@
             top: 10px;
             right: 10px;
             padding: 10px 15px;
-            background-color: #f44336;
+            background-color: rgba(244, 67, 54, 0.95);  /* Slightly more transparent red */
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 12px;
             font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, backdrop-filter 0.3s ease;  /* Smooth transitions */
+            backdrop-filter: blur(5px);  /* Initial light blur effect */
+            -webkit-backdrop-filter: blur(5px);  /* Safari support */
         }
 
         .logout-btn:hover {
-            background-color: #e53935;
+            background-color: rgba(229, 57, 53, 0.6);  /* Slightly more opaque red on hover */
+            backdrop-filter: blur(10px);  /* Increase blur effect on hover */
+            color: white;
+            text-decoration: underline;
         }
 
         /* List of sightings */
@@ -105,28 +119,33 @@
         }
 
         .sighting-list li {
-            font-size: 16px;  /* Matching font size with leaderboard items */
-            background-color: #f2f2f2;
-            border: 1px solid #ddd;
+            font-size: 16px;  /* Matching font size with items from the leaderboard page */
+            background: rgba(255, 255, 255, 0.3); /* Semi-transparent white background */
+            border: 1px solid rgba(255, 255, 255, 0.5); /* Subtle border */
             padding: 15px;
             margin-bottom: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            border-radius: 8px;  /* Rounded corners */
+            backdrop-filter: blur(5px);  /* Subtle blur for the glass effect */
+            -webkit-backdrop-filter: blur(5px);  /* Safari support */
+            color: #333;
+            transition: background-color 0.3s, box-shadow 0.3s ease;  /* Smooth transition for hover */
             cursor: pointer;
         }
 
+        /* Hover effect for list items */
         .sighting-list li:hover {
-            background-color: #f1f1f1;
+            background-color: rgba(255, 255, 255, 0.5);  /* Slightly stronger background on hover */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);  /* Light shadow on hover for depth */
         }
 
         /* Hidden details for sightings */
         .sighting-details {
-            max-height: 0;
+            height: 0;
             overflow: hidden;
             padding: 0 10px;
             font-size: 14px;
             color: #555;
-            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+            transition: height 0.3s ease, padding 0.3s ease;
         }
 
         /* Anger level styling */
@@ -158,20 +177,24 @@
             display: inline-block;
             margin: 10px;
             padding: 10px 20px;
-            background-color: #4CAF50;
+            background-color: rgba(76, 175, 80, 0.95);  /* Slightly more transparent green */
             color: white;
-            border: none;
-            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.3);  /* Slight white border */
+            border-radius: 12px;  /* Rounded corners */
             font-size: 16px;
             cursor: pointer;
             text-align: center;
             text-decoration: none;
+            backdrop-filter: blur(5px);  /* Initial light blur effect */
+            -webkit-backdrop-filter: blur(5px);  /* Safari support */
+            transition: background-color 0.3s ease, backdrop-filter 0.3s ease;  /* Smooth transitions */
         }
 
         .back-btn:hover {
-            background-color: #89ca8a;
+            background-color: rgba(137, 202, 138, 0.85);
+            backdrop-filter: blur(10px);  /* Increase blur effect on hover */
+            color: white;
             text-decoration: underline;
-            color: #0000EE;
         }
 
         .links-container {
@@ -188,6 +211,8 @@
             display: block;
             margin-left: auto;
             margin-right: auto;
+            border-radius: 12px; /* Rounded corners to match container */
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         a {
@@ -199,53 +224,60 @@
         }
 
         a:hover {
-            color: #4CAF50;
+            color: inherit;
             text-decoration: underline;
         }
 
         .about-container {
             max-width: 900px;
             width: 100%;
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.2); /* Translucent white */
+            backdrop-filter: blur(10px); /* Glass effect */
+            -webkit-backdrop-filter: blur(10px); /* Safari support */
             padding: 0 20px;
             margin-top: 30px;
             margin-bottom: 30px;
-            border-radius: 8px;
+            border-radius: 12px;
             text-align: center;
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out, padding 0.2s ease-out;
+            color: black; /* Ensures all text defaults to black */
         }
 
         .about-container h2 {
             font-size: 28px;
             margin-bottom: 15px;
-            color: #333;
+            color: #000; /* Black text */
         }
 
         .about-container p {
             font-size: 16px;
-            color: #555;
+            color: #111; /* Slightly lighter black for readability */
         }
 
         .toggle-about-btn {
             display: inline-block;
             margin-top: 20px;
             padding: 10px 20px;
-            background-color: transparent;
-            color: #333;
-            border: none;
+            background: rgba(255, 255, 255, 0.2); /* Transparent white */
+            color: black; /* White text for contrast */
+            border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle border */
             font-size: 16px;
             cursor: pointer;
             text-align: center;
             text-decoration: none;
             font-weight: bold;
+            border-radius: 12px; /* Rounded edges */
+            backdrop-filter: blur(10px); /* Blur for glass effect */
+            -webkit-backdrop-filter: blur(10px); /* Safari support */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Soft shadow */
         }
+
 
         .toggle-about-btn:hover {
             text-decoration: underline;
-            color: #4CAF50;
+            color: black;
         }
 
         /* Mobile styles */
@@ -284,6 +316,7 @@
 
 <body>
     <div class="container">
+    <div class="glass-inner">
         <div class="login-greeting">Welcome, {{ user.username }}!</div>
 
         <form action="{{ url_for('logout') }}" method="POST" style="display: inline;">
@@ -327,29 +360,31 @@
             <a href="{{ url_for('leaderboard') }}" class="back-btn">View Leaderboard</a>
             <a href="{{ url_for('user_logs', username=user.username) }}" class="back-btn">Your Logs</a>
         </div>
-
-        <br><br>
-
-    <h1>
-        <svg width="40" height="40" viewBox="0 0 150 150" fill="currentColor" style="vertical-align: middle;">
-        <path d="M48.2009 127.867C39.1474 128.882 32.7627 123.94 26.413 118.429C17.337 110.55 11.7439 98.8133 19.3119 89.6194C26.6425 80.7138 41.2263 78.5339 41.2263 78.5339C41.2263 78.5339 23.4428 80.8709 12.3719 71.0199C6.72602 65.9962 3.55921 59.4268 2.77416 51.8266C1.76431 42.0502 0.117374 22.047 0.00376359 14.662C-0.12467 6.31322 3.04015 0.732097 8.55502 0.117877C21.7513-1.35186 37.2532 11.0643 52.3174 29.4249C66.959 47.2703 72.6953 59.8939 72.6953 59.8939C72.6953 59.8939 78.4315 47.2703 93.0731 29.4249C108.137 11.0643 123.639-1.35186 136.835 0.117877C142.35 0.732097 145.515 6.31322 145.387 14.662C145.273 22.047 143.626 42.0502 142.616 51.8266C141.831 59.4268 138.664 65.9962 133.019 71.0199C121.948 80.8709 104.164 78.5339 104.164 78.5339C104.164 78.5339 118.748 80.7138 126.079 89.6194C133.647 98.8133 128.054 110.55 118.978 118.429C112.628 123.94 106.243 128.882 97.1896 127.867C80.7219 126.02 72.6953 95.3316 72.6953 95.3316C72.6953 95.3316 64.6686 126.02 48.2009 127.867Z" fill="#029bff" fill-rule="nonzero" opacity="1" stroke="none"/>
-      </svg>
-      Bluesky Profile
-    </h1>
-    <br>
-
-    <script type="module" src="https://cdn.jsdelivr.net/npm/bsky-embed/dist/bsky-embed.es.js" async></script>
-    <bsky-embed
-    username="blowertracker.pythonanywhere.com"
-    mode="light"
-    limit="1"
-    link-image="true"
-    custom-styles=".w-full { font-size: 1.2em; }"
-    >
-    </bsky-embed>
-    <br>
     </div>
-    <br>
+</div>
+
+    <div class="container">
+        <div class="glass-inner">
+            <h1>
+                <svg width="40" height="40" viewBox="0 0 150 150" fill="currentColor" style="vertical-align: middle;">
+                    <path d="M48.2009 127.867C39.1474 128.882 32.7627 123.94 26.413 118.429C17.337 110.55 11.7439 98.8133 19.3119 89.6194C26.6425 80.7138 41.2263 78.5339 41.2263 78.5339C41.2263 78.5339 23.4428 80.8709 12.3719 71.0199C6.72602 65.9962 3.55921 59.4268 2.77416 51.8266C1.76431 42.0502 0.117374 22.047 0.00376359 14.662C-0.12467 6.31322 3.04015 0.732097 8.55502 0.117877C21.7513-1.35186 37.2532 11.0643 52.3174 29.4249C66.959 47.2703 72.6953 59.8939 72.6953 59.8939C72.6953 59.8939 78.4315 47.2703 93.0731 29.4249C108.137 11.0643 123.639-1.35186 136.835 0.117877C142.35 0.732097 145.515 6.31322 145.387 14.662C145.273 22.047 143.626 42.0502 142.616 51.8266C141.831 59.4268 138.664 65.9962 133.019 71.0199C121.948 80.8709 104.164 78.5339 104.164 78.5339C104.164 78.5339 118.748 80.7138 126.079 89.6194C133.647 98.8133 128.054 110.55 118.978 118.429C112.628 123.94 106.243 128.882 97.1896 127.867C80.7219 126.02 72.6953 95.3316 72.6953 95.3316C72.6953 95.3316 64.6686 126.02 48.2009 127.867Z" fill="#029bff" fill-rule="nonzero" opacity="1" stroke="none"/>
+                </svg>
+                Bluesky Profile
+            </h1>
+            <br>
+
+            <script type="module" src="https://cdn.jsdelivr.net/npm/bsky-embed/dist/bsky-embed.es.js" async></script>
+            <bsky-embed
+                username="blowertracker.pythonanywhere.com"
+                mode="light"
+                limit="1"
+                link-image="true"
+                custom-styles=".w-full { font-size: 1.3em; }"
+            >
+            </bsky-embed>
+        </div>
+    </div>
+
 
     <button class="toggle-about-btn" onclick="toggleAbout()">About This Site</button>
 
@@ -359,29 +394,36 @@
     </div>
 
     <script>
-        function toggleAbout() {
-            var aboutContainer = document.querySelector('.about-container');
-            if (aboutContainer.style.maxHeight === '0px' || aboutContainer.style.maxHeight === '') {
-                aboutContainer.style.maxHeight = aboutContainer.scrollHeight + "px";
-                aboutContainer.style.padding = "20px";
+        function toggleDetails(listItem) {
+            const details = listItem.querySelector('.sighting-details');
+            const icon = listItem.querySelector('.toggle-icon');
+
+            if (details.style.height && details.style.height !== '0px') {
+                // Collapse
+                details.style.height = '0px';
+                details.style.paddingTop = '0px';
+                details.style.paddingBottom = '0px';
+                icon.classList.remove('open');
             } else {
-                aboutContainer.style.maxHeight = '0px';
-                aboutContainer.style.padding = "0px";
+                // Expand
+                const scrollHeight = details.scrollHeight + "px";
+                details.style.height = scrollHeight;
+                details.style.paddingTop = '10px';
+                details.style.paddingBottom = '10px';
+                icon.classList.add('open');
             }
         }
 
-        function toggleDetails(listItem) {
-            var details = listItem.querySelector('.sighting-details');
-            var icon = listItem.querySelector('.toggle-icon');
-            // Toggle the visibility of the details with smooth transition
-            if (details.style.maxHeight === '0px' || details.style.maxHeight === '') {
-                details.style.maxHeight = details.scrollHeight + "px";
-                details.style.padding = "10px";
-                icon.classList.add('open');
+        function toggleAbout() {
+            const aboutSection = document.querySelector('.about-container');
+            if (aboutSection.style.maxHeight && aboutSection.style.maxHeight !== '0px') {
+                aboutSection.style.maxHeight = '0';
+                aboutSection.style.paddingTop = '0px';
+                aboutSection.style.paddingBottom = '0px';
             } else {
-                details.style.maxHeight = '0px';
-                details.style.padding = "0px";
-                icon.classList.remove('open');
+                aboutSection.style.maxHeight = aboutSection.scrollHeight + "px";
+                aboutSection.style.paddingTop = '20px';
+                aboutSection.style.paddingBottom = '20px';
             }
         }
     </script>
